@@ -109,7 +109,6 @@
     </el-card>
 
     <div class="op-container">
-      <el-button>取消</el-button>
       <el-button type="primary" @click="handActivityadd">添加活动</el-button>
     </div>
   </div>

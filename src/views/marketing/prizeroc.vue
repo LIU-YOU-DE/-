@@ -50,7 +50,7 @@
                 highlight-current-row
                 >
                 <el-table-column align="center" label="活动id" prop="activityId"></el-table-column>
-                <el-table-column align="center" label="用户id" prop="memberId"></el-table-column> 
+                <el-table-column align="center" label="用户id" prop="id"></el-table-column> 
                 <el-table-column align="center" label="用户名字" prop="memberName"></el-table-column> 
                 <el-table-column align="center" label="电话号码" prop="phoneNumber"></el-table-column> 
                 <el-table-column align="center" label="奖品名字" prop="prizeName"></el-table-column> 
@@ -61,15 +61,21 @@
                 </el-table-column>
                 <el-table-column align="center" label="领取状态" prop="status">
                     <template slot-scope="scope">
-                        <el-tag :type="scope.row.status==1 ? 'success' : (scope.row.status== 2 ?'info':'danger')">{{scope.row.status==1 ? '用户未领取奖品' : (scope.row.status== 2 ?'用户领取奖品':'管理员已经联系过该用户')}}</el-tag>
+                        <el-tag :type="scope.row.status==1 ? 'success' : (scope.row.status== 2 ?'info':'danger')" v-model="scope.row.status">{{scope.row.status==1 ? '用户未领取奖品' : (scope.row.status== 2 ?'用户领取奖品':'管理员已经联系过该用户')}}</el-tag>
                     </template>
                 </el-table-column> 
+                <el-table-column align="center" label="操作" prop="status" width="250">
+                    <template  slot-scope="scope">
+                        <el-button v-if="scope.row.status==2" @click.prevent="handupdatestatus(scope.row.id,scope.row.status)" size="mini" type="success">已联系用户</el-button>
+                        <el-button @click="handdeleteprizeroc(scope.row.id)" type="danger" size="mini">删除</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
     </div>
 </template>
 
 <script>
-import {getprizerecord,getprize } from '@/api/storage'
+import {getprizerecord,getprize,updatestatus ,deleteprizeroc} from '@/api/storage'
 
 export default {
     data(){
@@ -95,9 +101,36 @@ export default {
         this.handgetprizeRecord()
     },
     methods:{
+        // 删除用户中奖记录
+        handdeleteprizeroc(id){
+            deleteprizeroc(id).then(response=>{
+                this.$notify.success({
+                    title:"成功",
+                    message:"删除成功"
+                })
+                this.handgetprizeRecord()
+            }).catch(response=>{
+                this.$notify.error({
+                    title:"失败",
+                    message:response.data.errmsg,
+                    duration:0
+                })
+            })
+        },
+        // 修改用户领取状态
+        handupdatestatus(id,status){
+            console.log(id)
+            if(status==2){
+                status=3
+                updatestatus(id,status).then(response=>{
+                    this.handgetprizeRecord()
+            })
+        }
+        },
         handgetprizeRecord(){
             getprizerecord(this.listQuery).then(response=>{
                 this.list=response.data.data.list
+                console.log(this.list)
             })
         },
         seachprize(){
