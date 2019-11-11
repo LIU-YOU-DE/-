@@ -66,7 +66,8 @@
                 </el-table-column> 
                 <el-table-column align="center" label="操作" prop="status" width="250">
                     <template  slot-scope="scope">
-                        <el-button v-if="scope.row.status==2" @click.prevent="handupdatestatus(scope.row.id,scope.row.status)" size="mini" type="success">已联系用户</el-button>
+                        <el-button v-if="scope.row.status==2" @click.prevent="handupdatestatus(scope.row.id,scope.row.status)" size="mini" type="success">我已联系</el-button>
+                        <el-button v-if="scope.row.status==3" @click.prevent="handupdatestatus(scope.row.id,scope.row.status)" size="mini" type="success">改回未联系</el-button>
                         <el-button @click="handdeleteprizeroc(scope.row.id)" type="danger" size="mini">删除</el-button>
                     </template>
                 </el-table-column>
@@ -119,18 +120,20 @@ export default {
         },
         // 修改用户领取状态
         handupdatestatus(id,status){
-            console.log(id)
             if(status==2){
                 status=3
                 updatestatus(id,status).then(response=>{
                     this.handgetprizeRecord()
+                })
+            }else if(status==3){
+                status=2
+            }updatestatus(id,status).then(response=>{
+                this.handgetprizeRecord()
             })
-        }
         },
         handgetprizeRecord(){
             getprizerecord(this.listQuery).then(response=>{
                 this.list=response.data.data.list
-                console.log(this.list)
             })
         },
         seachprize(){
