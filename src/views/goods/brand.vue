@@ -10,7 +10,7 @@
         placeholder="请输入品牌商ID"
       /> -->
       <el-input
-        v-model="listQuery.name"
+        v-model.trim="listQuery.name"
         clearable
         class="filter-item"
         style="width: 200px;"

@@ -157,6 +157,10 @@
   margin-top:-10px;
   margin-bottom:10px;
 }
+.avatar-uploader-icon[data-v-60ffddd6]{
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+}
 </style>
 
 <script>

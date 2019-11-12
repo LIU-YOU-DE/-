@@ -3,14 +3,14 @@
     <!-- 查询和其他操作 -->
     <div class="filter-container">
       <el-input
-        v-model="listQuery.memberId"
+        v-model.trim="listQuery.memberId"
         clearable
         class="filter-item"
         style="width: 200px;"
         placeholder="请输入用户ID"
       />
       <el-input
-        v-model="listQuery.giftOrderId"
+        v-model.trim="listQuery.giftOrderId"
         clearable
         class="filter-item"
         style="width: 300px;"

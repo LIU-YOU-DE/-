@@ -16,8 +16,8 @@
             placeholder="请输入奖品名称"
             v-on:keyup.enter.native="seachprize"
           />
-            <el-button class="filter-item" type="primary" icon="el-icon-search" @click="seachprize">查找</el-button>
-            <el-button @click="pushPrizeBox" type="primary" style="margin-left:10px;">添加</el-button>
+            <el-button class="filter-item" type="primary" icon="el-icon-search" @click="seachprize" v-permission="['GET /prize','GET /prize/name/{name}','GET /prize/short']">查找</el-button>
+            <el-button @click="pushPrizeBox" type="primary" style="margin-left:10px;" v-permission="['POST /prize']">添加</el-button>
 
             <el-table 
                 style="margin-left:20px;width:80%;margin-top:10px;" 
@@ -35,8 +35,8 @@
         <el-table-column align="center" label="备注" prop="remark"></el-table-column>
         <el-table-column align="center" label="操作" width="200">
             <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="handleUpdatePrize(scope.row)">编辑</el-button>
-                 <el-button type="danger" size="mini" @click="handDeletePrize(scope.row)">删除</el-button>
+                <el-button type="primary" size="mini" @click="handleUpdatePrize(scope.row)" v-permission="['PUT /prize/{id}']">编辑</el-button>
+                 <el-button type="danger" size="mini" @click="handDeletePrize(scope.row)"v-permission="['DELETE /prize/{id}']">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -188,7 +188,6 @@ export default {
       if (this.dataForm.description.length >= 0) {
         this.showdeletebutton = true;
       }
-      console.log(this.dataForm.description)
     },
        deleteinput(index){
       this.counter.splice(index, 1);
@@ -237,7 +236,7 @@ export default {
             })
             this.dataForm.description=description
 
-            if(this.dataForm.description.length>0){
+            if(this.dataForm.description.length > 1){
                 this.showdeletebutton=true
             }
         },
@@ -285,12 +284,11 @@ export default {
                 remark:this.goods.remark
             }
             pushPrize(finalGoods).then(response=>{
-                console.log(finalGoods)
                 this.$notify.success({
                     title:'成功',
                     message:'奖品添加成功'
                 })
-                this.$router.go(0)
+                this.getList()
                 this.dialogVisible=false
             }).catch(response=>{
                     this.$notify.error({

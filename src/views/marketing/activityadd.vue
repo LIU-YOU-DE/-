@@ -16,7 +16,7 @@
           </template>
         </el-form-item>
         <el-form-item label="活动类型" prop="type">
-          <el-radio v-model="goods.type" label="1">水果机抽奖</el-radio>
+          <el-radio v-model="goods.type" label="1">水果机抽奖（需添加8个奖品）</el-radio>
         </el-form-item>
         <el-form-item label="活动图片" prop="imgUrl">
           <el-upload
@@ -39,22 +39,25 @@
     <el-card class="box-card">
       <h3>指定奖品</h3>
       <p style="font-size:14px;color:#666;">所有奖品中奖概率的和为100,如果输入小数将向下取整。</p>
-      <el-button :plain="true" type="primary" @click="attributeVisiable=true">添加</el-button>
+      <el-button :plain="true" type="primary" @click="attributeVisiable=true" style="margin-right:20px;">添加</el-button>
+      <span style="color:#666;font-size:16px;display:inline-block;margin-right:20px;">总点数：100 </span> 
+      <span style="font-size:16px;">已分配点数：{{sum}}</span>
+      <span style="font-size:16px;color:red;display:inline-block;margin-left:20px;">剩余可分配点数：{{100-sum}}</span>
       <el-table border :data="prizeList">
-        <el-table-column align="center" label="奖品名称" prop="prizeName" />
-        <el-table-column align="center" label="奖品描述" prop="description" type="textarea"/>
-        <el-table-column align="center" prop="imgUrl" label="奖品图片">
+        <el-table-column align="center" label="奖品ID" prop="prizeId" width="100"/>
+        <el-table-column align="center" label="奖品名称" prop="prizeName" width="200"/>
+        <el-table-column align="center" label="奖品描述" prop="description" type="textarea" width="300"/>
+        <el-table-column align="center" prop="imgUrl" label="奖品图片" width="150">
           <template slot-scope="scope">
             <img :src="scope.row.imgUrl" width="40" >
           </template>
         </el-table-column>
-        <el-table-column align="center" label="奖品ID" prop="prizeId" />
         <el-table-column align="center" label="中奖概率" prop="probability">
             <template slot-scope="scope">
                 <el-slider :min=1 :max=100 v-model="scope.row.probability" @change="test($event,scope.row.prizeId)" show-input></el-slider>
             </template>
         </el-table-column>
-        <el-table-column align="center" label="中奖概率" prop="probability">
+        <el-table-column align="center" label="中奖概率" prop="probability" width="100">
           <div>{{list.probability}}</div>
         </el-table-column>
         <el-table-column
@@ -170,7 +173,7 @@
 </style>
 
 <script>
-import {uploadPath,createactivity,getPrizeList,getprize,deleteprize } from '@/api/storage'
+import {uploadPath,createactivity,getPrizeList,getprize } from '@/api/storage'
 import { getToken } from '@/utils/auth'
 
 export default {
@@ -185,7 +188,7 @@ export default {
         value:1,
         val:"",
         a:[],
-        sum:0,
+        sum:0,    //实时已用点数
         prizeList:[],
         prizeList2:[],
         attributeForm: { prizeName: '', description: '', imgUrl: '' },
@@ -215,14 +218,6 @@ export default {
     }
   },
   methods:{
-    conso(){
-      for(var i=0;i<this.goods.description.length;i++){
-        var abc={}
-        abc.index=this.goods.description[i]
-        this.a.push(abc)
-      }
-      console.log(this.a)
-    },
     deleteinput(index){
       this.counter.splice(index, 1);
       this.goods.description.splice(index,1);
@@ -278,23 +273,26 @@ export default {
         
     },
       deletePrize(row){
-          deleteprize(row.prizeId).then(response=>{
-              this.$notify.success({
-                  title:"成功",
-                  message:"删除成功"
-              })
-              this.$router.go(0)
-          }).catch(response=>{
-              this.$notify.error({
-                  title:"失败",
-                  message:response.data.errmsg,
-                  duration:0
-              })
-          })
+        var index = this.prizeList.indexOf(row);
+        this.prizeList.splice(index,1)
       },
       handprize(){
         for (var i = 0; i < this.choosedata.length; i++) {
-            this.prizeList.push(this.choosedata[i])
+          
+          //当前列表中存在的奖品id列表
+          var prizeIdArray = this.prizeList.map(x => {return x.prizeId});
+          
+          //要添加的奖品id
+          var prizeId = this.choosedata[i].prizeId;
+
+          if(prizeIdArray.indexOf(prizeId) >= 0){
+            this.$alert("不能重复添加奖品")
+            return 
+          }
+          // this.choosedata[i]['probability'] = 1
+          this.prizeList.push(this.choosedata[i]);
+          this.sum += 1
+          // debugger
         }
         this.attributeVisiable=false
       },

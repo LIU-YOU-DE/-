@@ -225,7 +225,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/marketing/youhuiquan'),
         name: 'youhuiquan',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /coupons'],
           title: '优惠券管理',
           noCache: true,
           THeader: ['优惠券ID','面值','优惠券价格','优惠券内容','优惠券状态','适用范围','优惠券种类','是否显示','排序','添加时间','更新时间','备注'],
@@ -252,14 +252,15 @@ export const asyncRouterMap = [
           perms: ['POST /coupon'],
           title: '添加优惠券',
           noCache: true
-        }
+        },
+        hidden:true
       },
       {
         path:'prize',
         component: () => import('@/views/marketing/prize'),
         name: 'prize',
         meta: {
-          perms: ['POST /prize'],
+          perms: ['GET /prize'],
           title: '奖品管理',
           noCache: true
         }
@@ -272,18 +273,30 @@ export const asyncRouterMap = [
           perms: ['POST /activityadd'],
           title: '添加活动',
           noCache: true
-        }
+        },
+        hidden: true
       },
       {
         path:'activity',
         component: () => import('@/views/marketing/activity'),
         name: 'activity',
         meta: {
-          perms: ['POST /activity'],
+          perms: ['GET /activity'],
           title: '活动管理',
           noCache: true
         }
       },
+      {
+        path:'showactivity',
+        component: () => import('@/views/marketing/showactivity'),
+        name: 'showactivity',
+        meta: {
+          perms: ['POST /showactivity'],
+          title: '查看活动',
+          noCache: true
+      },
+      hidden: true
+    },
       {
         path: 'activityedit',
         component: () => import('@/views/marketing/activityedit'),
@@ -347,7 +360,8 @@ export const asyncRouterMap = [
           perms: ['POST /gift'],
           title: '礼品添加',
           noCache: true
-        }
+        },
+        hidden:true
       },
       {
         path: 'giftorder',
@@ -476,7 +490,8 @@ export const asyncRouterMap = [
           perms: ['POST /merchant'],
           title: '添加商家',
           noCache: true
-        }
+        },
+        hidden:true
       },
       {
         path: 'order',
@@ -527,7 +542,8 @@ export const asyncRouterMap = [
           perms: ['POST /car'],
           title: '添加汽车',
           noCache: true
-        }
+        },
+        hidden:true
       },
       {
         path: 'cartype',

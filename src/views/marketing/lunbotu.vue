@@ -3,7 +3,7 @@
     <!-- 查询和其他操作 -->
     <div class="filter-container">
       <el-input
-        v-model="listQuery.title"
+        v-model.trim="listQuery.title"
         clearable
         class="filter-item"
         style="width: 200px;"
@@ -91,6 +91,7 @@
             active-color="#01bf00"
             inactive-color="#ff4949"
             @change="handleshowswitch(scope.row.id,scope.row.status)"
+            v-permission="['PUT /banner/status/{id}']"
           />
         </template>
       </el-table-column>

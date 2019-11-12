@@ -3,14 +3,14 @@
     <!-- 查询和其他操作 -->
     <div class="filter-container">
       <el-input
-        v-model="listQuery.key"
+        v-model.trim="listQuery.key"
         clearable
         class="filter-item"
         style="width: 200px;"
         placeholder="请输入对象KEY"
       />
       <el-input
-        v-model="listQuery.name"
+        v-model.trim="listQuery.name"
         clearable
         class="filter-item"
         style="width: 200px;"

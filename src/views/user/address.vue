@@ -3,8 +3,8 @@
 
     <!-- 查询和其他操作 -->
     <div class="filter-container">
-      <el-input v-model="listQuery.memberId" clearable class="filter-item" style="width: 200px;" placeholder="请输入用户ID"/>
-      <el-input v-model="listQuery.name" clearable class="filter-item" style="width: 200px;" placeholder="请输入收货人名称"/>
+      <el-input v-model.trim="listQuery.memberId" clearable class="filter-item" style="width: 200px;" placeholder="请输入用户ID"/>
+      <el-input v-model.trim="listQuery.name" clearable class="filter-item" style="width: 200px;" placeholder="请输入收货人名称"/>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter" v-permission="['GET /memberAddress']">查找</el-button>
       <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload" v-permission="['GET /memberAddress']">导出</el-button>
     </div>

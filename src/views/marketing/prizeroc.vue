@@ -40,7 +40,7 @@
             placeholder="请输入电话号码"
             v-on:keyup.enter.native="seachprize"
           />
-            <el-button class="filter-item" type="primary" icon="el-icon-search" @click="seachprize">查找</el-button>
+            <el-button class="filter-item" type="primary" icon="el-icon-search" @click="seachprize" v-permission="['GET /prizeRecord']">查找</el-button>
 
             <el-table 
                 :data="list"
@@ -50,7 +50,7 @@
                 highlight-current-row
                 >
                 <el-table-column align="center" label="活动id" prop="activityId"></el-table-column>
-                <el-table-column align="center" label="用户id" prop="id"></el-table-column> 
+                <el-table-column align="center" label="用户id" prop="memberId"></el-table-column> 
                 <el-table-column align="center" label="用户名字" prop="memberName"></el-table-column> 
                 <el-table-column align="center" label="电话号码" prop="phoneNumber"></el-table-column> 
                 <el-table-column align="center" label="奖品名字" prop="prizeName"></el-table-column> 
@@ -66,9 +66,9 @@
                 </el-table-column> 
                 <el-table-column align="center" label="操作" prop="status" width="250">
                     <template  slot-scope="scope">
-                        <el-button v-if="scope.row.status==2" @click.prevent="handupdatestatus(scope.row.id,scope.row.status)" size="mini" type="success">我已联系</el-button>
-                        <el-button v-if="scope.row.status==3" @click.prevent="handupdatestatus(scope.row.id,scope.row.status)" size="mini" type="success">改回未联系</el-button>
-                        <el-button @click="handdeleteprizeroc(scope.row.id)" type="danger" size="mini">删除</el-button>
+                        <el-button v-if="scope.row.status==2" @click.prevent="handupdatestatus(scope.row.id,scope.row.status)" size="mini" type="success" v-permission="['PUT /prizeRecord/{id}']">我已联系</el-button>
+                        <el-button v-if="scope.row.status==3" @click.prevent="handupdatestatus(scope.row.id,scope.row.status)" size="mini" type="success" v-permission="['PUT /prizeRecord/{id}']">改回未联系</el-button>
+                        <el-button @click="handdeleteprizeroc(scope.row.id)" type="danger" size="mini" v-permission="['DELETE /prizeRecord/{id}']">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>

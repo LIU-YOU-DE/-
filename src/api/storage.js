@@ -140,5 +140,19 @@ export function getprizerecord(query){
     params: query
   })
 }
+
+export function updatestatus(id,data){
+  return request({
+    url:`/prizeRecord/${id}?status=${data}`,
+    method:'put'
+  })
+}
+
+export function deleteprizeroc(id){
+  return request({
+    url:`/prizeRecord/${id}`,
+    method:'delete'
+  })
+}
 const uploadPath = process.env.BASE_API + '/storage/create'
 export { uploadPath }

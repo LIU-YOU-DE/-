@@ -8,8 +8,8 @@
             placeholder="请输入活动名称"
             v-on:keyup.enter.native="seachprize"
           />
-        <el-button @click="seachprize" type="primary" style="margin-left:10px;">查找</el-button>
-        <el-button @click="goactivityadd" type="primary" style="margin-left:10px;">添加</el-button>
+        <el-button @click="seachprize" type="primary" style="margin-left:10px;" v-permission="['GET /activity']">查找</el-button>
+        <el-button @click="goactivityadd" type="primary" style="margin-left:10px;" v-permission="['POST /activity']">添加</el-button>
 
     <el-table style="margin-left:20px;margin-right:20px;width:98%;margin-top:10px;"
         border
@@ -27,14 +27,14 @@
       </el-table-column>
     <el-table-column align="center" label="修改活动状态" prop="payStatus">
         <template slot-scope="scope">
-            <el-button :type="scope.row.status==1?'success':'danger'" @click="updateactivitystatus(scope.row.id,scope.row.status)" size="mini">{{scope.row.status==1?'结束活动':'开始活动'}}</el-button>
+            <el-button :type="scope.row.status==1?'success':'danger'" @click="updateactivitystatus(scope.row.id,scope.row.status)" size="mini" v-permission="['PUT /activity/status/{id}']">{{scope.row.status==1?'结束活动':'开始活动'}}</el-button>
         </template>
     </el-table-column>
         <el-table-column align="center" label="操作">
             <template slot-scope="scope">
-                <el-button type="success" @click="showActiviti(scope.row)" size="mini">查看</el-button>
-                <el-button type="primary" @click="goactivityedit(scope.row)" size="mini">编辑</el-button>
-                <el-button type="danger" @click="handDeleteActivity(scope.row)" size="mini">删除</el-button>
+                <el-button type="success" @click="showActiviti(scope.row)" size="mini" v-permission="['GET /activity/{id}']">查看</el-button>
+                <el-button type="primary" @click="goactivityedit(scope.row)" size="mini" v-permission="['PUT /activity/{id}']">编辑</el-button>
+                <el-button type="danger" @click="handDeleteActivity(scope.row)" size="mini" v-permission="['DELETE /activity/{id}']">删除</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -42,32 +42,56 @@
     <el-dialog
       title="查看活动信息"
       :visible.sync="dialogVisible"
-      width="700px"
+      width="800px;"
     >
       <el-form ref="dataForm" :model="dataForm" label-width="150px;" label-position="right">
           <el-form-item label="活动ID" style="padding-left:16px;">
-                <el-input class="prizeinp" v-model="dataForm.id" readonly></el-input>
+                <span>{{dataForm.id}}</span>
             </el-form-item>
             <el-form-item label="活动名称">
-                <el-input class="prizeinp" v-model="dataForm.activityName" readonly></el-input>
+                <span>{{dataForm.activityName}}</span>
             </el-form-item>
             <el-form-item label="活动类型">
-              <el-input class="prizeinp" v-model="dataForm.type" readonly></el-input>
+              <span>{{dataForm.type}}</span>
             </el-form-item>
             <el-form-item label="活动描述">
               <template slot-scope="scope">
                 <div v-for="(d,index) in dataForm.description" :key="index" style="padding-left:67px;">
-                  <el-input v-model="dataForm.description[index]" class="prizeinp desc" readonly type="textarea"></el-input>
+                  <span>{{dataForm.description[index]}}</span>
               </div>
               </template>
             </el-form-item>
-
-
             <el-form-item label="活动状态">
               <el-tag>{{dataForm.payStatus==1?'未开始':'进行中'}}</el-tag>
             </el-form-item>
       </el-form>
-      <el-button type="primary" @click="dialogVisible = false" style="margin-right:0;">确 定</el-button>
+
+        <p style="font-size:16px;">奖品列表</p>
+        <el-table border :data="dataForm.prizeList">
+        <el-table-column align="center" label="奖品ID" prop="prizeId" width="100"/>
+        <el-table-column align="center" label="奖品名称" prop="prizeName" width="200"/>
+        <el-table-column align="center" label="奖品描述" prop="description" type="textarea" width="300"/>
+        <el-table-column align="center" prop="imgUrl" label="奖品图片" width="150">
+          <template slot-scope="scope">
+            <img :src="scope.row.imgUrl" width="40" >
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="中奖概率" prop="probability" width="100">
+          <div>{{list.probability}}</div>
+        </el-table-column>
+         </el-table-column>
+        <el-table-column
+          align="center"
+          label="操作"
+          width="200"   
+          class-name="small-padding fixed-width"
+        >
+          <template slot-scope="scope">
+            <el-button type="danger" size="mini" @click="deletePrize(scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-button type="primary" @click="dialogVisible = false" style="margin-right:0;margin-top:10px;">确 定</el-button>
     </el-dialog>
     </div>
 </template>
@@ -83,7 +107,8 @@ export default {
               activityName:'',
               type:'',
               description:'',
-              payStatus:''
+              payStatus:'',
+              prizeList:""
             },
             list:[],
             dialogVisible:false,
@@ -108,13 +133,16 @@ export default {
         this.getlist()
     },
     methods:{
+      // 查看
       showActiviti(row){
          this.dialogVisible=true
          this.dataForm.id=row.id
          this.dataForm.activityName=row.activityName
          this.dataForm.type=row.type
          this.dataForm.description=row.description
+         this.dataForm.prizeList=row.prizeList
          this.dataForm.payStatus=row.status
+        this.$router.push({path:"/marketing/showactivity",query:{row:row}})
         },
       // 查找
       seachprize(){
@@ -131,7 +159,7 @@ export default {
           title:"成功",
           message:"状态修改成功"
         })
-        this.$router.go(0)
+        this.getlist()
       }).catch(response=>{
         this.$notify.error({
           title:"失败",
@@ -147,7 +175,7 @@ export default {
           title:"成功",
           message:"状态修改成功"
         })
-        this.$router.go(0)
+        this.getlist()
       }).catch(response=>{
         this.$notify.error({
           title:"失败",

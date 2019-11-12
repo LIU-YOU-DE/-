@@ -302,8 +302,14 @@ export default {
       this.$router.push({ path: "/goods/list" });
     },
     handleEdit: function() {
+      var num
+      for(var i=0;i<this.carTypeList.length;i++){
+        if(this.goods.carTypeName==this.carTypeList[i].name){
+          num=this.carTypeList[i].type
+        }
+      }
       const finalGoods = {
-        carType:this.goods.carTypeName,
+        carType:'',
         brandId: this.goods.brandId,
         buyDeadline: this.goods.buyDeadline,
         carDetails: this.goods.carDetails,
@@ -318,14 +324,19 @@ export default {
         sort: this.goods.sort,
         status: this.goods.status,
         updateTime: this.goods.updateTime,
-        wordBegin: this.goods.wordBegin
+        wordBegin: this.goods.wordBegin,
+        remark:this.goods.remark
         // goods: this.goods,
         // specifications: this.specifications,
         // products: this.products,
         // attributes: this.attributes
       };
       // console.log(finalGoods);
-
+      if(num>1){
+        finalGoods.carType=num
+      }else{
+        finalGoods.carType=this.goods.carTypeName
+      }
       editGoods(finalGoods, this.upid)
         .then(response => {
           this.$notify.success({

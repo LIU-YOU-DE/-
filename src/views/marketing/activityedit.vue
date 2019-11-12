@@ -78,77 +78,36 @@
         :plain="true"
         type="primary"
         @click="attributeVisiable=true"
+        style="margin-right:20px;"
       >添加</el-button>
-      <el-table
-        border
-        :data="prizeList"
-      >
-        <el-table-column
-          align="center"
-          label="奖品ID"
-          prop="prizeId"
-          width="100"
-        />
-        <el-table-column
-          align="center"
-          label="奖品名称"
-          prop="prizeName"
-          width="200"
-        />
-        <el-table-column
-          align="center"
-          label="奖品描述"
-          prop="prizeDesc"
-          width="300"
-        />
-        <el-table-column
-          align="center"
-          prop="prizeUrl"
-          label="奖品图片"
-          width="150"
-        >
+      <span style="color:#666;font-size:16px;display:inline-block;margin-right:20px;">总点数：100</span> 
+      <span style="font-size:16px;">已分配点数：{{sum}}</span>
+      <span style="font-size:16px;color:red;display:inline-block;margin-left:20px;">剩余可分配点数：{{100-sum}}</span>
+      <el-table border :data="prizeList">
+        <el-table-column align="center" label="奖品ID" prop="prizeId" width="100"/>
+        <el-table-column align="center" label="奖品名称" prop="prizeName" width="200"/>
+        <el-table-column align="center" label="奖品描述" prop="description" type="textarea" width="300"/>
+        <el-table-column align="center" prop="imgUrl" label="奖品图片" width="150">
           <template slot-scope="scope">
-            <img
-              :src="scope.row.prizeUrl"
-              width="40"
-              v-if="scope.row.prizeUrl"
-            >
+            <img :src="scope.row.imgUrl" width="40" >
           </template>
         </el-table-column>
-        <el-table-column
-          align="center"
-          label="中奖概率"
-          prop="probability"
-        >
-          <template slot-scope="scope">
-            <el-slider
-              :min=1
-              :max=100
-              v-model="scope.row.probability"
-              @change="test($event,scope.row.prizeId)"
-              show-input
-            ></el-slider>
-          </template>
+        <el-table-column align="center" label="中奖概率" prop="probability">
+            <template slot-scope="scope">
+                <el-slider :min=1 :max=100 v-model="scope.row.probability" @change="test($event,scope.row.prizeId)" show-input></el-slider>
+            </template>
         </el-table-column>
-        <el-table-column
-          align="center"
-          label="中奖概率"
-          prop="probability"
-          width="100"
-        >
+        <el-table-column align="center" label="中奖概率" prop="probability" width="100">
+          <div>{{list.probability}}</div>
         </el-table-column>
         <el-table-column
           align="center"
           label="操作"
-          width="200"
+          width="200"   
           class-name="small-padding fixed-width"
         >
           <template slot-scope="scope">
-            <el-button
-              type="danger"
-              size="mini"
-              @click="handdeleteprize(scope.row.prizeId)"
-            >删除</el-button>
+            <el-button type="danger" size="mini" @click="deletePrize(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -229,7 +188,7 @@
         </div>
       </el-dialog>
     </el-card>
-    <el-button @click="handUpdateActivity">更新活动</el-button>
+    <el-button @click="handUpdateActivity" type="primary" style="margin-top:10px;margin-left:20px;">更新活动</el-button>
     </el-form>
   </div>
 </template>
@@ -240,8 +199,7 @@ import {
   updateactivity,
   uploadPath,
   getactivity,
-  getprize,
-  deleteprize
+  getprize
 } from "@/api/storage";
 import { getToken } from "@/utils/auth";
 
@@ -298,25 +256,12 @@ export default {
       if (this.goods.description.length >= 0) {
         this.showdeletebutton = true;
       }
-      console.log(this.goods)
     },
     // 删除奖品
-    handdeleteprize(id) {
-      console.log(id);
-      deleteprize(id)
-        .then(response => {
-          this.$notify.success({
-            title: "成功",
-            message: "删除成功"
-          });
-        })
-        .catch(response => {
-          this.$notify.error({
-            title: "失败",
-            message: response.data.errmsg,
-            duration: 0
-          });
-        });
+    deletePrize(row) {
+ 
+      var index = this.prizeList.indexOf(row);
+      this.prizeList.splice(index,1)
     },
     test(event, id) {
       this.sum = 0;
@@ -399,16 +344,16 @@ export default {
       this.prizeId = this.$route.query.id;
       getactivity(this.prizeId).then(response => {
         this.goods = response.data.data;
-        if (this.goods.description.length > 0) {
+        if (this.goods.description.length > 1) {
           this.showdeletebutton = true;
         }
+        console.log(this.goods.description)
         let tempArr = []
         this.goods.description.forEach(ele => {
           tempArr.push({description: ele})
         })
         this.goods.description = tempArr
         this.prizeList = response.data.data.prizeList;
-        console.log(this.prizeList);
       });
     },
     changeFun(data) {
