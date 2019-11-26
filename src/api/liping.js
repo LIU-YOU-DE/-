@@ -8,9 +8,9 @@ export function listliping(query) {
   })
 }
 
-export function deleteliping(data) {
+export function deleteliping(id) {
   return request({
-    url: `/gift/${data.id}`,
+    url: `/gift/${id}`,
     method: 'delete',
   })
 }

@@ -24,17 +24,17 @@ export function readRole(data) {
   })
 }
 
-export function updateRole(data) {
+export function updateRole(id,data) {
   return request({
-    url: '/role/${data.id}',
+    url: `/role/${id}`,
     method: 'put',
     data
   })
 }
 
-export function deleteRole(data) {
+export function deleteRole(id) {
   return request({
-    url: '/role/${data.id}',
+    url: `/role/${id}`,
     method: 'delete'
   })
 }

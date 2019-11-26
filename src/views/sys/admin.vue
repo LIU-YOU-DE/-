@@ -239,6 +239,7 @@ export default {
     },
     handleUpdate(row) {
       this.dataForm = Object.assign({},row)
+      console.log(this.dataForm)
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -248,7 +249,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          updateAdmin(this.dataForm)
+          updateAdmin(this.dataForm.id,this.dataForm)
             .then(() => {
               for (const v of this.list) {
                 if (v.id === this.dataForm.id) {

@@ -78,30 +78,31 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
+  // --------------------------------————————————————————————————
   {
-    path: '/user',
+    path: '/test',
     component: Layout,
     redirect: 'noredirect',
     alwaysShow: true,
-    name: 'userManage',
+    name: 'sysManage',
     meta: {
-      title: '用户管理',
+      title: '用户专区',
       icon: 'chart'
     },
     children: [
       {
         path: 'user',
-        component: () => import('@/views/user/user'),
+        component: () => import('@/views/test/user'),
         name: 'user',
         meta: {
-          perms: ['GET /members'],
-          title: '用户管理',
+          perms: ['GET /admin',],
+          title: '用户信息',
           noCache: true
         }
       },
       {
         path: 'userlook',
-        component: () => import('@/views/user/userlook'),
+        component: () => import('@/views/test/userlook'),
         name: 'userlook',
         meta: {
           perms: ['GET /members', 'GET /members/{memberId}'],
@@ -111,465 +112,375 @@ export const asyncRouterMap = [
         hidden: true
       },
       {
-        path: 'address',
-        component: () => import('@/views/user/address'),
-        name: 'address',
+        path: 'useredit',
+        component: () => import('@/views/test/useredit'),
+        name: 'useredit',
         meta: {
-          perms: ['GET /memberAddress'],
-          title: '用户收货地址',
-          noCache: true
-        }
-      },
-      {
-        path: 'listLoginRecord',
-        component: () => import('@/views/user/userLoginRecord'),
-        path: 'listLoginRecord',
-        name: 'listLoginRecord',
-        meta: {
-          perms: ['GET /loginRecords'],
-          title: '用户登录记录',
-          noCache: true
-        }
-      },
-      {
-        path: 'history',
-        component: () => import('@/views/user/history'),
-        name: 'history',
-        meta: {
-          perms: ['GET /pointRecords'],
-          title: '用户积分记录',
-          noCache: true
-        }
-      }
-      // {
-      //   path: 'feedback',
-      //   component: () => import('@/views/user/feedback'),
-      //   name: 'feedback',
-      //   meta: {
-      //     perms: ['GET /admin/feedback/list'],
-      //     title: '浏览记录',
-      //     noCache: true
-      //   }
-      // }
-    ]
-  },
-  // 商家管理
-  // {
-  //   path: '/merchant',
-  //   component: Layout,
-  //   redirect: 'noredirect',
-  //   alwaysShow: true,
-  //   name: 'merchant',
-  //   meta: {
-  //     title: '商家管理',
-  //     icon: 'chart'
-  //   },
-  //   children: [
-  //     {
-  //       path: 'merchant',
-  //       component: () => import('@/views/merchant/merchant'),
-  //       name: 'merchant',
-  //       meta: {
-  //         perms: ['GET /merchants'],
-  //         title: '商家管理',
-  //         noCache: true
-  //       }
-  //     },
-  //     {
-  //       path: 'merchantEdit',
-  //       component: () => import('@/views/merchant/merchantEdit'),
-  //       name: 'merchantEdit',
-  //       meta: {
-  //         perms: ['GET /merchants', 'PUT /merchant/{id}', 'PUT /merchant/status/{id}'],
-  //         title: '修改商家信息',
-  //         noCache: true
-  //       },
-  //       hidden: true
-  //     },
-  //     {
-  //       path: 'merchantAdd',
-  //       component: () => import('@/views/merchant/merchantAdd'),
-  //       name: 'merchantAdd',
-  //       meta: {
-  //         perms: ['POST /merchant'],
-  //         title: '添加商家',
-  //         noCache: true
-  //       }
-  //     }
-  //   ]
-  // },
-  // 营销
-  {
-    path: '/marketing',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    name: 'marketing',
-    meta: {
-      title: '营销管理',
-      icon: 'chart'
-    },
-    children: [
-      {
-        path: 'lunbotu',
-        component: () => import('@/views/marketing/lunbotu'),
-        name: 'lunbotu',
-        meta: {
-          perms: ['GET /banners'],
-          title: '轮播图管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'youhuiquan',
-        component: () => import('@/views/marketing/youhuiquan'),
-        name: 'youhuiquan',
-        meta: {
-          perms: ['GET /coupons'],
-          title: '优惠券管理',
-          noCache: true,
-          THeader: ['优惠券ID','面值','优惠券价格','优惠券内容','优惠券状态','适用范围','优惠券种类','是否显示','排序','添加时间','更新时间','备注'],
-          TDataField: ['id','faceValue','price','next','status','type','kind','statys','sort','createTime','updateTime','remark'],
-          TTitle: '优惠券表'
-        }
-      },
-      {
-        path: 'youhuiquanedit',
-        component: () => import('@/views/marketing/youhuiquanedit'),
-        name: 'quanedyouhuiquaneditit',
-        meta: {
-          perms: ['GET /coupons', 'PUT /coupon/{id}', 'PUT /coupon/status/{id}', 'GET /coupon/{id}'],
-          title: '修改优惠券',
+          perms: ['GET /members', 'GET /members/{memberId}'],
+          title: '编辑资料',
           noCache: true
         },
         hidden: true
       },
       {
-        path: 'youhuiquanadd',
-        component: () => import('@/views/marketing/youhuiquanadd'),
-        name: 'youhuiquanadd',
+        path: 'userip',
+        component: () => import('@/views/test/userip'),
+        name: 'userip',
         meta: {
-          perms: ['POST /coupon'],
+          perms: ['GET /members', 'GET /members/{memberId}'],
+          title: '登录日志',
+          noCache: true
+        },
+        hidden: true
+      },
+    ]
+  },
+  {
+    path: '/test-goods',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'sysManage',
+    meta: {
+      title: '订单专区',
+      icon: 'chart'
+    },
+    children:[
+      {
+        path: 'test-orderlook1',
+        component: () => import('@/views/test-goods/test-orderlook1'),
+        name: 'test-orderlook1',
+        meta: {
+          perms: ['GET /banners'],
+          title: '订单编辑',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-orderlook2',
+        component: () => import('@/views/test-goods/test-orderlook2'),
+        name: 'test-orderlook2',
+        meta: {
+          perms: ['GET /banners'],
+          title: '订单编辑',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-orderlook2-2',
+        component: () => import('@/views/test-goods/test-orderlook2-2'),
+        name: 'test-orderlook2-2',
+        meta: {
+          perms: ['GET /banners'],
+          title: '订单编辑',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-orderlook3',
+        component: () => import('@/views/test-goods/test-orderlook3'),
+        name: 'test-orderlook3',
+        meta: {
+          perms: ['GET /banners'],
+          title: '订单编辑',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-orderlook4',
+        component: () => import('@/views/test-goods/test-orderlook4'),
+        name: 'test-orderlook4',
+        meta: {
+          perms: ['GET /banners'],
+          title: '订单编辑',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-orders',
+        component: () => import('@/views/test-goods/test-orders'),
+        name: 'test-orders',
+        meta: {
+          perms: ['GET /banners'],
+          title: '订单管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-logistics',
+        component: () => import('@/views/test-goods/test-logistics'),
+        name: 'test-logistics',
+        meta: {
+          perms: ['GET /banners'],
+          title: '发货列表',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-orderLogistics',
+        component: () => import('@/views/test-goods/test-orderLogistics'),
+        name: 'test-orderLogistics',
+        meta: {
+          perms: ['GET /banners'],
+          title: '订单跟踪',
+          noCache: true
+        },
+        hidden:true
+      },
+    ]
+  },
+  {
+    path: '/test-marketing',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'sysManage',
+    meta: {
+      title: '运营专区',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'test-lunbotu',
+        component: () => import('@/views/test-marketing/test-lunbotu'),
+        name: 'test-lunbotu',
+        meta: {
+          perms: ['GET /banners'],
+          title: '轮播图广告位设置',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-giftfenlei',
+        component: () => import('@/views/test-marketing/test-giftfenlei'),
+        name: 'test-giftfenlei',
+        meta: {
+          perms: ['GET /banners'],
+          title: '礼品分类设置',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-prize',
+        component: () => import('@/views/test-marketing/test-prize'),
+        name: 'test-prize',
+        meta: {
+          perms: ['GET /banners'],
+          title: '礼品信息导入',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-brand',
+        component: () => import('@/views/test-marketing/test-brand'),
+        name: 'test-brand',
+        meta: {
+          perms: ['GET /admin',],
+          title: '汽车品牌管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-merchant',
+        component: () => import('@/views/test-marketing/test-merchant'),
+        name: 'test-merchant',
+        meta: {
+          perms: ['GET /admin',],
+          title: '汽车门店信息',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-merchantEdit',
+        component: () => import('@/views/test-marketing/test-merchantEdit'),
+        name: 'test-merchantEdit',
+        meta: {
+          perms: ['GET /admin',],
+          title: '汽车门店编辑',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-merchantAdd',
+        component: () => import('@/views/test-marketing/test-merchantAdd'),
+        name: 'test-merchantAdd',
+        meta: {
+          perms: ['GET /admin',],
+          title: '添加汽车门店',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-list',
+        component: () => import('@/views/test-marketing/test-list'),
+        name: 'test-list',
+        meta: {
+          perms: ['GET /admin',],
+          title: '车辆信息管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-create',
+        component: () => import('@/views/test-marketing/test-create'),
+        name: 'test-create',
+        meta: {
+          perms: ['GET /admin',],
+          title: '新增车辆',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-edit',
+        component: () => import('@/views/test-marketing/test-edit'),
+        name: 'test-edit',
+        meta: {
+          perms: ['GET /admin',],
+          title: '编辑车辆信息',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-activity',
+        component: () => import('@/views/test-marketing/test-activity'),
+        name: 'test-activity',
+        meta: {
+          perms: ['GET /admin',],
+          title: '活动管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-activityadd',
+        component: () => import('@/views/test-marketing/test-activityadd'),
+        name: 'test-activityadd',
+        meta: {
+          perms: ['GET /admin',],
+          title: '添加活动',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-activityedit',
+        component: () => import('@/views/test-marketing/test-activityedit'),
+        name: 'test-activityedit',
+        meta: {
+          perms: ['GET /admin',],
+          title: '编辑活动',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-showactivity',
+        component: () => import('@/views/test-marketing/test-showactivity'),
+        name: 'test-showactivity',
+        meta: {
+          perms: ['GET /admin',],
+          title: '活动详情',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-youhuiquan',
+        component: () => import('@/views/test-marketing/test-youhuiquan'),
+        name: 'test-youhuiquan',
+        meta: {
+          perms: ['GET /admin',],
+          title: '优惠券管理',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-youhuiquanadd',
+        component: () => import('@/views/test-marketing/test-youhuiquanadd'),
+        name: 'test-youhuiquanadd',
+        meta: {
+          perms: ['GET /admin',],
           title: '添加优惠券',
           noCache: true
         },
         hidden:true
       },
       {
-        path:'prize',
-        component: () => import('@/views/marketing/prize'),
-        name: 'prize',
+        path: 'test-youhuiquanedit',
+        component: () => import('@/views/test-marketing/test-youhuiquanedit'),
+        name: 'test-youhuiquanedit',
         meta: {
-          perms: ['GET /prize'],
+          perms: ['GET /admin',],
+          title: '编辑优惠券',
+          noCache: true
+        },
+         hidden:true
+      },
+      {
+        path: 'test-gift',
+        component: () => import('@/views/test-marketing/test-gift'),
+        name: 'test-gift',
+        meta: {
+          perms: ['GET /admin',],
           title: '奖品管理',
           noCache: true
-        }
-      },
-      {
-        path:'activityadd',
-        component: () => import('@/views/marketing/activityadd'),
-        name: 'activityadd',
-        meta: {
-          perms: ['POST /activityadd'],
-          title: '添加活动',
-          noCache: true
-        },
-        hidden: true
-      },
-      {
-        path:'activity',
-        component: () => import('@/views/marketing/activity'),
-        name: 'activity',
-        meta: {
-          perms: ['GET /activity'],
-          title: '活动管理',
-          noCache: true
-        }
-      },
-      {
-        path:'showactivity',
-        component: () => import('@/views/marketing/showactivity'),
-        name: 'showactivity',
-        meta: {
-          perms: ['POST /showactivity'],
-          title: '查看活动',
-          noCache: true
-      },
-      hidden: true
-    },
-      {
-        path: 'activityedit',
-        component: () => import('@/views/marketing/activityedit'),
-        name: 'activityedit',
-        meta: {
-          perms: ['PUT /activity/{id}'],
-          title: '活动编辑',
-          noCache: true
-        },
-        hidden: true
-      },
-      {
-        path: 'prizeroc',
-        component: () => import('@/views/marketing/prizeroc'),
-        name: 'prizeroc',
-        meta: {
-          perms: ['PUT //prizeRecord'],
-          title: '用户中奖记录',
-          noCache: true
         },
       },
-    ]
-  },
-  {
-    path: '/gift',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    name: 'gift',
-    meta: {
-      title: '礼品管理',
-      icon: 'chart'
-    },
-    children: [
-      {
-        path: 'liping',
-        component: () => import('@/views/gift/liping'),
-        name: 'liping',
-        meta: {
-          perms: ['POST /gifts'],
-          title: '礼品管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'lipingedit',
-        component: () => import('@/views/gift/lipingedit'),
-        name: 'lipingedit',
-        meta: {
-          perms: ['POST /gifts', 'PUT /gift/{id}', 'PUT /gift/status/{id}'],
-          title: '礼品编辑',
-          noCache: true
-        },
-        hidden: true
-      },
-      {
-        path: 'lipingadd',
-        component: () => import('@/views/gift/lipingadd'),
-        name: 'lipingadd',
-        meta: {
-          perms: ['POST /gift'],
-          title: '礼品添加',
-          noCache: true
-        },
-        hidden:true
-      },
-      {
-        path: 'giftorder',
-        component: () => import('@/views/gift/giftorder'),
-        name: 'giftorder',
-        meta: {
-          perms: ['GET /giftOrders'],
-          title: '礼品订单管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'giftfenlei',
-        component: () => import('@/views/gift/giftfenlei'),
-        name: 'giftfenlei',
-        meta: {
-          perms: ['GET /giftCategorys'],
-          title: '礼品分类',
-          noCache: true
-        }
-      }
-    ]
-  },
-  {
-    path: '/mall',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    name: 'mallManage',
-    meta: {
-      title: '商场管理',
-      icon: 'chart'
-    },
-    children: [
       {
-        path: 'rules',
-        component: () => import('@/views/mall/rules'),
-        name: 'rules',
+        path: 'test-prizeroc',
+        component: () => import('@/views/test-marketing/test-prizeroc'),
+        name: 'test-prizeroc',
         meta: {
-          perms: ['GET /rules'],
-          title: '活动规则',
-          noCache: true
-        }
-      },
-      {
-        path: 'rulesedit',
-        component: () => import('@/views/mall/rulesedit'),
-        name: 'rulesedit',
-        meta: {
-          perms: [ 'PUT /rule/{id}', 'GET /rule/{id}'],
-          title: '修改活动规则',
+          perms: ['GET /admin',],
+          title: '用户中奖记录',
           noCache: true
         },
-        hidden: true
       },
       {
-        path: 'notices',
-        component: () => import('@/views/mall/notices'),
-        name: 'notices',
+        path: 'test-issue',
+        component: () => import('@/views/test-marketing/test-issue'),
+        name: 'test-issue',
         meta: {
-          perms: ['GET /notices'],
-          title: '系统通知',
-          noCache: true
-        }
-      },
-      {
-        path: 'issue',
-        component: () => import('@/views/mall/issue'),
-        name: 'issue',
-        meta: {
-          perms: ['GET /comment'],
-          title: '问答管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'region',
-        component: () => import('@/views/mall/region'),
-        name: 'region',
-        meta: {
-          perms: ['GET /regions','GET /regions/short'],
-          title: '行政区域',
-          noCache: true
-        }
-      }
-    ]
-  },
-
-  {
-    path: '/goods',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    name: 'goodsManage',
-    meta: {
-      title: '汽车模块管理',
-      icon: 'chart'
-    },
-    children: [
-      {
-        path: 'merchant',
-        component: () => import('@/views/goods/merchant'),
-        name: 'merchant',
-        meta: {
-          perms: ['GET /merchants'],
-          title: '商家管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'merchantEdit',
-        component: () => import('@/views/goods/merchantEdit'),
-        name: 'merchantEdit',
-        meta: {
-          perms: ['GET /merchants', 'PUT /merchant/{id}', 'PUT /merchant/status/{id}'],
-          title: '修改商家信息',
+          perms: ['GET /admin',],
+          title: '问答设置',
           noCache: true
         },
-        hidden: true
       },
       {
-        path: 'merchantAdd',
-        component: () => import('@/views/goods/merchantAdd'),
-        name: 'merchantAdd',
+        path: 'test-prizeadd',
+        component: () => import('@/views/test-marketing/test-prizeadd'),
+        name: 'test-prizeadd',
         meta: {
-          perms: ['POST /merchant'],
-          title: '添加商家',
+          perms: ['GET /banners'],
+          title: '添加礼品',
           noCache: true
         },
         hidden:true
       },
       {
-        path: 'order',
-        component: () => import('@/views/goods/order'),
-        name: 'order',
+        path: 'prizeedit',
+        component: () => import('@/views/test-marketing/prizeedit'),
+        name: 'test-prizeedit',
         meta: {
-          perms: ['GET /orders'],
-          title: '订单管理',
-          noCache: true
-        }
-      },
-      {
-        path: 'orderlook',
-        component: () => import('@/views/goods/orderlook'),
-        name: 'orderlook',
-        meta: {
-          perms: ['GET /orders', 'GET /order/{id}'],
-          title: '订单详情',
-          noCache: true
-        },
-        hidden: true
-      },
-      {
-        path: 'brand',
-        component: () => import('@/views/goods/brand'),
-        name: 'brand',
-        meta: {
-          perms: ['GET /brands'],
-          title: '汽车品牌',
-          noCache: true
-        }
-      },
-      {
-        path: 'list',
-        component: () => import('@/views/goods/list'),
-        name: 'goodsList',
-        meta: {
-          perms: ['GET /cars'],
-          title: '汽车列表',
-          noCache: true
-        }
-      },
-      {
-        path: 'create',
-        component: () => import('@/views/goods/create'),
-        name: 'goodsCreate',
-        meta: {
-          perms: ['POST /car'],
-          title: '添加汽车',
+          perms: ['GET /banners'],
+          title: '编辑礼品',
           noCache: true
         },
         hidden:true
       },
-      {
-        path: 'cartype',
-        component: () => import('@/views/goods/cartype'),
-        name: 'goodsCarType',
-        meta: {
-          perms: ['GET /commonParam/{type}'],
-          title: "车型列表",
-          noCache: true
-        }
-      },
-      {
-        path: 'edit',
-        component: () => import('@/views/goods/edit'),
-        name: 'goodsEdit',
-        meta: {
-          perms: ['PUT /car/{id}', 'PUT /car/status/{id}'],
-          title: '编辑汽车',
-          noCache: true
-        },
-        hidden: true
-      }
     ]
   },
   {
-    path: '/sys',
+    path: '/test-admin',
     component: Layout,
     redirect: 'noredirect',
     alwaysShow: true,
@@ -578,11 +489,11 @@ export const asyncRouterMap = [
       title: '系统管理',
       icon: 'chart'
     },
-    children: [
+    children:[
       {
-        path: 'admin',
-        component: () => import('@/views/sys/admin'),
-        name: 'admin',
+        path: 'test-sys',
+        component: () => import('@/views/test-admin/test-sys'),
+        name: 'user',
         meta: {
           perms: ['GET /admin',],
           title: '管理员',
@@ -590,27 +501,106 @@ export const asyncRouterMap = [
         }
       },
       {
-        path: 'role',
-        component: () => import('@/views/sys/role'),
-        name: 'role',
+        path: 'test-rols',
+        component: () => import('@/views/test-admin/test-rols'),
+        name: 'test-rols',
         meta: {
-          perms: ['GET /roles'],
+          perms: ['GET /storage/list'],
           title: '角色管理',
           noCache: true
         }
       },
+    ]
+  },
+  {
+    path: '/test-sys',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'sysManage',
+    meta: {
+      title: '系统设置',
+      icon: 'chart'
+    },
+    children: [
       {
-        path: 'os',
-        component: () => import('@/views/sys/os'),
-        name: 'os',
+        path: 'test-os',
+        component: () => import('@/views/test-admin/test-os'),
+        name: 'test-os',
         meta: {
           perms: ['GET /storage/list'],
           title: '对象存储',
           noCache: true
         }
-      }
+      },
+      {
+        path: 'test-rules',
+        component: () => import('@/views/test-sys/test-rules'),
+        name: 'test-rules',
+        meta: {
+          perms: ['GET /storage/list'],
+          title: '基本设置',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-cartype',
+        component: () => import('@/views/test-sys/test-cartype'),
+        name: 'test-cartype',
+        meta: {
+          perms: ['GET /storage/list'],
+          title: '车型设置',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-notices',
+        component: () => import('@/views/test-sys/test-notices'),
+        name: 'test-notices',
+        meta: {
+          perms: ['GET /storage/list'],
+          title: '消息通知',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-region',
+        component: () => import('@/views/test-sys/test-region'),
+        name: 'test-region',
+        meta: {
+          perms: ['GET /storage/list'],
+          title: '区域设置',
+          noCache: true
+        }
+      },
+      {
+        path: 'test-rulesedit',
+        component: () => import('@/views/test-sys/test-rulesedit'),
+        name: 'test-rulesedit',
+        meta: {
+          perms: ['GET /storage/list'],
+          title: '编辑规则',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path: 'test-rulesadd',
+        component: () => import('@/views/test-sys/test-rulesadd'),
+        name: 'test-rulesadd',
+        meta: {
+          perms: ['GET /storage/list'],
+          title: '新增规则',
+          noCache: true
+        },
+        hidden:true
+      },
     ]
   },
+
+  // ------——————————————————————————————————————————--------------------------------------------------------——————————
+
+
   {
     path: '/profile',
     component: Layout,
@@ -627,5 +617,10 @@ export const asyncRouterMap = [
     hidden: true
   },
 
-  { path: '*', redirect: '/404', hidden: true }
+  { path: '*', redirect: '/404', hidden: true },
+
+  
+  
 ]
+
+

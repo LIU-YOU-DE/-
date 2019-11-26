@@ -21,7 +21,7 @@ export function modifyOrderStatus(status){
 
 export function detailOrder(id) {
   return request({
-    url: `/order/${id}`,
+    url: `/orders/${id}`,
     method: 'get',
   })
 }
@@ -30,6 +30,26 @@ export function shipOrder(data) {
   return request({
     url: '/order/ship',
     method: 'post',
+    data
+  })
+}
+
+export function orderShip(shipForm){
+  return request({
+    url:`/orders/shipStatus/`+shipForm.id,
+    method:'put',
+    params: {
+      'orderType':shipForm.orderType,
+      'shipperCode': shipForm.shipperCode,
+      'logisticCode': shipForm.logisticCode
+    }
+  })
+}
+
+export function ordersList(data){
+  return request({
+    url:`/orders/statistics`,
+    method:'get',
     data
   })
 }
@@ -65,6 +85,13 @@ export function editOrderStatus(id,status){
   })
 }
 
+// 取消订单
+export function updateOrderStatus(id,orderType){
+  return request({
+    url:`/orders/orderStatus/${id}?orderType=${orderType}`,
+    method:'put'
+  })
+}
 /**
  * 根据凭证id修改凭证审核状态
  * @param {*} id 凭证id

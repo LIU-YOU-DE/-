@@ -1,0 +1,420 @@
+<template>
+  <div class="app-container">
+    <!-- 查询和其他操作 -->
+    <div class="filter-container">
+      <!-- <el-button @click="rulesadd"  class="filter-item">添加</el-button> -->
+    </div>
+
+    <!-- 查询结果 -->
+    <div>
+      <div class="tabletop">
+        <p class="table-title"><svg-icon icon-class="list2" class-name="card-panel-icon svg"/>数据列表</p>
+      </div>
+      <el-table
+      v-loading="listLoading"
+      :data="list"
+      element-loading-text="正在查询中。。。"
+      border
+      fit
+      highlight-current-row
+    >
+      <el-table-column align="center" label="规则id" prop="id" sortable />
+
+      <el-table-column align="center" label="购买优惠券奖励积分" prop="finishOrderRewardPoint" />
+
+      <el-table-column align="center" label="注册奖励积分" prop="registerRewardPoint" />
+
+      <el-table-column align="center" label="转发奖励积分" prop="shareRewardPoint" />
+
+      <el-table-column align="center" label="签到奖励积分" prop="signinRewardPoint" />
+
+      <el-table-column align="center" label="礼品兑换券图片" prop="giftRulePicture">
+        <template slot-scope="scope">
+          <img v-if="scope.row.giftRulePicture" :src="scope.row.giftRulePicture" width="80" @click="showgiftRulePicture(scope.row.giftRulePicture)">
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="汽车购物券图片" prop="carRulePicture">
+        <template slot-scope="scope">
+          <img v-if="scope.row.carRulePicture" :src="scope.row.carRulePicture" width="80" @click="showcarRulePicture(scope.row.carRulePicture)" >
+        </template>
+      </el-table-column>
+
+      <!-- <el-table-column align="center" label="备注" prop="remark" /> -->
+
+      <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="handleUpdate(scope.row)" v-permission="['PUT /rule/{id}','GET /rule/{id}']">编辑</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    </div>
+    
+    <!-- 礼品活动规则大图 -->
+    <div class="popContainer" v-show="dialogVisible" @click="showcar">
+      <div class="createbox" style="margin-top:30px;">
+        <div class="tabletop">
+           <p class="address">礼品活动规则大图</p>
+        </div>
+        <img :src="goodsdetail" alt="">
+      </div>
+    </div>
+
+    <!-- 汽车活动规则大图是 -->
+    <div class="popContainer" v-show="showgoodsdetail" @click="showgoods">
+      <div class="createbox" style="overflow-y:auto; overflow-x:auto;height:100%;">
+        <div class="tabletop">
+           <p class="address">汽车活动规则大图</p>
+        </div>
+        <img :src="goodsdetail" alt="">
+      </div>
+    </div>
+     <!-- <el-dialog title="礼品活动规则详情" :visible.sync="dialogVisible" align="center">
+        <img :src="goodsdetail" alt="">
+      </el-dialog> -->
+  
+
+    <!-- <el-dialog title="汽车活动规则详情" :visible.sync="dialogVisible" align="center">
+        <img :src="goodsdetail" alt="">
+      </el-dialog> -->
+  </div>
+</template>
+
+<style scoped>
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #20a0ff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
+}
+.avatar {
+  width: 145px;
+  height: 145px;
+  display: block;
+}
+.tabletop{
+  height:60px;
+  width:100%;
+  background:#f3f3f3;
+  border-bottom:1px solid #EBEEF5;
+}
+.table-title{
+  display:inline-block;
+  margin-left:10px;
+  margin-top:20px;
+  color:#555;
+  margin-right:75%;
+  font-size:15px;
+}
+.svg{
+  margin-right:5px;
+}
+.popContainer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.3);
+    z-index:10001
+}
+.tabletop{
+  height:60px;
+  width:100%;
+  background:#f3f3f3;
+  border-bottom:1px solid #EBEEF5;
+  padding-top:10px;
+}
+.table-title{
+  display:inline-block;
+  margin-left:10px;
+  margin-top:20px;
+  color:#555;
+  margin-right:75%;
+  font-size:15px;
+}
+.createbox{
+  position:fixed;
+  background:#fff;
+  border:1px solid #EBEEF5;
+  text-align: center;
+  left:30%;
+}
+.address{
+  font-size:18px;
+  color:#666;
+  margin-left:20px;
+  font-weight:600;
+  text-align: left;
+  padding-top:10px;
+}
+p{
+  margin:0;
+}
+
+</style>
+
+<script>
+import { listAd, createAd, updateAd, deleteAd, showswitch } from '@/api/rules'
+import { uploadPath } from '@/api/storage'
+import { getToken } from '@/utils/auth'
+import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+
+export default {
+  name: 'Brand',
+  components: { Pagination },
+  data() {
+    return {
+      showgiftdetail:false,
+      showgoodsdetail:false,
+      notice: [],
+      ruleContent: [],
+      updata: {},
+      uploadPath,
+      list: [],
+      listLoading: true,
+      listQuery: {
+        page: 1,
+        limit: 20,
+        id: undefined,
+        name: undefined,
+        sort: 'update_time',
+        order: 'desc'
+      },
+      dataForm: {
+        carRulePicture: '',
+        finishOrderRewardPoint: null,
+        remark: '',
+        giftRulePicture: '',
+        notice: [],
+        ruleContent: [],
+        shareRewardPoint: null,
+        registerRewardPoint: null
+      },
+      dialogFormVisible: false,
+      goodsdetail:"",
+      dialogVisible:false,
+      dialogStatus: '',
+      textMap: {
+        update: '编辑',
+        create: '创建'
+      },
+      rules: {
+        name: [
+          { required: true, message: '品牌商名称不能为空', trigger: 'blur' }
+        ]
+      },
+      downloadLoading: false
+    }
+  },
+  computed: {
+    headers() {
+      return {
+        'Mf-Token': getToken()
+      }
+    }
+  },
+  created() {
+    this.getList()
+  },
+  methods: {
+    rulesadd(){
+      this.$router.push({path:"/test-sys/test-rulesadd"})
+    },
+    showcar(){
+      this.dialogVisible=!this.dialogVisible
+    },
+    showgoods(){
+      this.showgoodsdetail=!this.showgoodsdetail
+    },
+    showcarRulePicture(detail){
+      this.goodsdetail=detail
+      this.showgoodsdetail=true
+    },
+    showgiftRulePicture(detail){
+      this.goodsdetail=detail
+      this.dialogVisible=true
+    },
+    getList() {
+      this.listLoading = true
+      listAd(this.listQuery)
+        .then(response => {
+          // console.log(response);
+          this.notice = response.data.data.notice
+          this.ruleContent = response.data.data.ruleContent
+          this.list = response.data.data
+          this.listLoading = false
+        })
+        .catch(() => {
+          this.list = []
+          this.total = 0
+          this.listLoading = false
+        })
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.getList()
+    },
+    resetForm() {
+      this.dataForm = {
+        id: '',
+        title: '',
+        remark: '',
+        targetType: '',
+        coverUrl: '',
+        sort: '',
+        targetId: '',
+        type: ''
+      }
+    },
+    handleCreate() {
+      this.resetForm()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    uploadPicUrl: function(response) {
+      this.dataForm.carRulePicture = response.data.url
+    },
+    uploadPicUrl1: function(response) {
+      this.dataForm.giftRulePicture = response.data.url
+    },
+    createData() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          createAd(this.dataForm)
+            .then(response => {
+              this.list.unshift(response.data.data)
+              this.getList()
+              this.dialogFormVisible = false
+              this.$notify.success({
+                title: '成功',
+                message: '创建成功'
+              })
+            })
+            .catch(response => {
+              this.$notify.error({
+                title: '失败',
+                message: response.data.errmsg,
+                duration: 0
+              })
+            })
+        }
+      })
+    },
+
+    handleUpdate(row) {
+      this.$router.push({ query: { id: row.id }, path: '/test-sys/test-rulesedit' })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate(valid => {
+        if (valid) {
+          this.updata = {
+            id: this.dataForm.id,
+            title: this.dataForm.title,
+            remark: this.dataForm.remark,
+            targetType: this.dataForm.targetType,
+            status: this.dataForm.status,
+            coverUrl: this.dataForm.coverUrl,
+            sort: this.dataForm.sort,
+            targetId: this.dataForm.targetId
+          }
+
+          updateAd(this.updata)
+            .then(() => {
+              for (const v of this.list) {
+                if (v.id === this.dataForm.id) {
+                  const index = this.list.indexOf(v)
+                  this.list.splice(index, 1, this.dataForm)
+                  break
+                }
+              }
+              this.dialogFormVisible = false
+              this.$notify.success({
+                title: '成功',
+                message: '更新成功'
+              })
+            })
+            .catch(response => {
+              this.$notify.error({
+                title: '失败',
+                message: response.data.errmsg,
+                duration: 0
+              })
+            })
+        }
+      })
+    },
+    // 修改状态
+    handleshowswitch(id, data) {
+      showswitch(id, data)
+        .then(response => {
+          this.$notify.success({
+            title: '成功',
+            message: '修改成功'
+          })
+        })
+        .catch(response => {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.errmsg,
+            duration: 0
+          })
+        })
+    },
+    handleDelete(row) {
+      deleteAd(row)
+        .then(response => {
+          this.getList()
+          this.$notify.success({
+            title: '成功',
+            message: '删除成功'
+          })
+          const index = this.list.indexOf(row)
+          this.list.splice(index, 1)
+        })
+        .catch(response => {
+          this.$notify.error({
+            title: '失败',
+            message: response.data.errmsg,
+            duration: 0
+          })
+        })
+    },
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = [
+          '品牌商ID',
+          '品牌商名称',
+          '介绍',
+          '低价',
+          '品牌商图片'
+        ]
+        const filterVal = ['id', 'name', 'desc', 'floorPrice', 'picUrl']
+        excel.export_json_to_excel2(
+          tHeader,
+          this.list,
+          filterVal,
+          '品牌商信息'
+        )
+        this.downloadLoading = false
+      })
+    }
+  }
+}
+</script>

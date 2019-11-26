@@ -135,7 +135,8 @@ import {
   createAd,
   updateAd,
   deleteAd,
-  showswitch
+  showswitch,
+  getad
 } from "@/api/youhuiquan";
 import { uploadPath } from "@/api/storage";
 import { getToken } from "@/utils/auth";
@@ -209,8 +210,13 @@ export default {
         });
     },
     handleFilter() {
-      this.listQuery.page = 1;
-      this.getList();
+      if(this.listQuery.id!==0){
+          getad(this.listQuery.id).then(response=>{
+            this.list=[response.data.data]
+        }).catch(response=>{
+          this.getList()
+        })
+      }
     },
     handleCreate() {
       this.$router.push({ path: "/marketing/youhuiquanadd" });

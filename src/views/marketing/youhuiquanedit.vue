@@ -302,7 +302,7 @@ export default {
         .then(response => {
           this.$notify.success({
             title: "成功",
-            message: "创建成功"
+            message: "更新成功"
           });
           this.$router.push({ path: "/marketing/youhuiquan" });
         })

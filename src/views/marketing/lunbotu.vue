@@ -7,7 +7,7 @@
         clearable
         class="filter-item"
         style="width: 200px;"
-        placeholder="请输入名字"
+        placeholder="请输入轮播图标题"
       />
       <el-button
         v-permission="['GET /banners']"

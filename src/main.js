@@ -12,6 +12,8 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import router from './router'
 import store from './store'
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
 
 import './icons' // icon
 import './permission' // permission control
@@ -22,6 +24,7 @@ import * as filters from './filters' // global filters
 import permission from '@/directive/permission/index.js' // 权限判断指令
 
 import {export_json_to_excel2} from '@/vendor/Export2Excel'
+
 Vue.prototype.$Export2Excel = export_json_to_excel2
 
 Vue.use(Element, {

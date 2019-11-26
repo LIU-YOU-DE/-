@@ -57,6 +57,14 @@ export function getPrizeList(query){
   })
 }
 
+export function getGiftList(query){
+  return request({
+    url :`/gifts`,
+    method:'get',
+    params: query
+  })
+}
+
 export function pushPrize(data){
   return request({
     url:`/prize`,
@@ -154,5 +162,18 @@ export function deleteprizeroc(id){
     method:'delete'
   })
 }
+
+
+// -----------------------------------------------------------------------------------
+export function getgiftlist(data){
+  return request({
+    url:`/shortGiftCategorys`,
+    method:'get',
+    data
+  })
+}
+
+
+// -----------------------------------------------------------------------------------------
 const uploadPath = process.env.BASE_API + '/storage/create'
 export { uploadPath }

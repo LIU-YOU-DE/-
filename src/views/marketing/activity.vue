@@ -8,7 +8,7 @@
             placeholder="请输入活动名称"
             v-on:keyup.enter.native="seachprize"
           />
-        <el-button @click="seachprize" type="primary" style="margin-left:10px;" v-permission="['GET /activity']">查找</el-button>
+        <el-button @click="seachprize" type="primary" v-permission="['GET /activity']">查找</el-button>
         <el-button @click="goactivityadd" type="primary" style="margin-left:10px;" v-permission="['POST /activity']">添加</el-button>
 
     <el-table style="margin-left:20px;margin-right:20px;width:98%;margin-top:10px;"

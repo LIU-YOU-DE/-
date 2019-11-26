@@ -70,3 +70,40 @@ export function updateStatus(id,data){
     method:'put'
   })
 }
+
+export function updateIsHot(id,data){
+  return request({
+    url:`/car/isHot/${id}?isHot=${data}`,
+    method:'put'
+  })
+}
+
+export function updateIsPopular(id,data){
+  return request({
+    url:`/car/isPopular/${id}?isPopular=${data}`,
+    method:'put'
+  })
+}
+
+export function updateIsRecommend(id,data){
+  return request({
+    url:`/car/isRecommend/${id}?isRecommend=${data}`,
+    method:'put'
+  })
+}
+
+export function updateIsSpecial(id,data){
+  return request({
+    url:`/car/isSpecial/${id}?isSpecial=${data}`,
+    method:'put'
+  })
+}
+
+export function getindex(query) {
+  return request({
+    url: '/dashboard',
+    method: 'get',
+    params:query
+  })
+}
+

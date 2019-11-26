@@ -3,6 +3,7 @@ module.exports = {
   ENV_CONFIG: '"dev"',
   // BASE_API: '"http://192.168.31.185:8001"'
    BASE_API: '"http://192.168.31.129:8001"'
+  //  BASE_API: '"https://api.hk.manage.dreamfly.ltd"'
   // BASE_API: '"http://localhost:8001"'
 }
 

@@ -276,6 +276,7 @@ export default {
         // console.log(response.data.data.list);
 
         this.categoryList = response.data.data.list
+        console.log(this.categoryList)
 
         //  debugger
         // console.log(this.categoryList[0].id);

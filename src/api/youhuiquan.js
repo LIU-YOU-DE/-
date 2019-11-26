@@ -49,3 +49,10 @@ export function deleteAd(data) {
     data
   })
 }
+
+export function getad(id) {
+  return request({
+    url: `/coupon/${id}`,
+    method: 'get',
+  })
+}

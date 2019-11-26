@@ -296,7 +296,7 @@ export default {
     finishOrder() {
       var status = this.orderDetail.orderStatus;
       const id=this.$route.query.id;
-      if(status == 1 || status ==6 ) {
+      if(status == 7 ) {
           editOrderStatus(id, 2).then(response => {
             this.$notify.success({
             title: "通知",
@@ -305,7 +305,7 @@ export default {
           this.getlist();
          });
       }else {
-        alert('只有未核销和审核中的订单才能核销！')
+        alert('只有审核通过的订单才能核销！')
       }
     },
     /**取消订单 */
@@ -313,7 +313,7 @@ export default {
       var status = this.orderDetail.orderStatus;
       const id=this.$route.query.id;  //订单id
       //1 未核销   6 审核凭证中 时可以取消订单
-      if(status == 1 || status == 6) {
+      if(status!=3 && status!=4 && status!=5 ) {
          editOrderStatus(id, 5).then(response => {
             this.$notify.success({
             title: "通知",
@@ -322,7 +322,7 @@ export default {
           this.getlist();
          });
       } else {
-        alert('只有未核销和审核中的订单才能取消！')
+        alert('订单已经被取消！')
       }
     },
     editThisRemark(){

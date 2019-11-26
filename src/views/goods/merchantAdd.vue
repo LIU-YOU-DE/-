@@ -306,7 +306,7 @@ export default {
             title: '成功',
             message: '添加成功'
           })
-          this.$router.push({ path: '/merchant/merchant' })
+          this.$router.push({ path: '/goods/merchant' })
         })
         .catch(response => {
           MessageBox.alert('业务错误：' + response.data.errmsg, '警告', {

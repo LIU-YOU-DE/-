@@ -23,10 +23,10 @@ export function readminAdmin(data) {
   })
 }
 
-export function updateAdmin(data) {
+export function updateAdmin(id,data) {
   return request({
-    url: '/admin/${data.id}',
-    method: 'post',
+    url: `/admin/${id}`,
+    method: 'put',
     data
   })
 }
