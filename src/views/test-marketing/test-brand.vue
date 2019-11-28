@@ -294,6 +294,7 @@ export default {
       })
     },
     uploadPicUrl: function(response) {
+      this.updateLogoUrl=response.data.url
       this.dataForm.logoUrl=response.data.url
       this.logoEditUrl = response.data.url
     },

@@ -8,9 +8,9 @@ export function listGoods(query) {
   })
 }
 
-export function deleteGoods(data) {
+export function deleteGoods(id) {
   return request({
-    url: `/car/${data.id}`,
+    url: `/car/${id}`,
     method: 'delete',
   })
 }

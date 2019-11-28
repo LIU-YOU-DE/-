@@ -59,16 +59,14 @@ export default {
              this.listQuery.memberId=this.$route.query.id
              listLoginRecord(this.listQuery).then(response=>{
                 this.list=response.data.data.list
-                console.log(this.list)
                 this.total = response.data.data.total
             })
         },
         handleEdit(){
-            // this.$router.push({path:"/test/userlook",query:{id:this.listQuery.userId}})
-            this.$router.go(-2)
+            this.$router.push({path:"/test/userlook",query:{id:this.listQuery.memberId}})
         },
         back(){
-            this.$router.go(-2)
+            this.$router.go(-1)
         },
     }
 }

@@ -76,9 +76,6 @@
                     <el-form-item label="礼品名称：" prop="name">
                         <el-input style="width:400px;" v-model="giftForm.name"></el-input>
                     </el-form-item>
-                    <el-form-item label="礼品原价：" prop="priceCny">
-                        <el-input style="width:400px;" v-model="giftForm.priceCny"></el-input>
-                    </el-form-item>
                     <el-form-item label="兑换积分：" prop="pricePoint">
                         <el-input style="width:400px;" v-model="giftForm.pricePoint"></el-input>
                     </el-form-item>
@@ -94,7 +91,7 @@
                     <h3 class="t1">库存规格</h3>
                 </div>
                     <el-form-item label="礼品市场价：" prop="priceCny">
-                        <el-input style="width:400px;" v-model="giftForm.priceMoney"></el-input>
+                        <el-input style="width:400px;" v-model="giftForm.priceCny"></el-input>
                     </el-form-item>
                     <el-form-item label="礼品库存：" prop="stock">
                         <el-input style="width:400px;" v-model="giftForm.stock"></el-input>
@@ -383,11 +380,14 @@ export default {
             num:0,
             giftId:"",
             num2:'',
+            childrenId:0,
             categoryId:"",
             uploadPath,
             checked:false,
             giftlist:{},
             arr:[],
+            giftIdName:[],
+            giftTypeList:[],
             galleryFileList: [],
             childrenlist:{},
             giftForm:{
@@ -450,12 +450,10 @@ export default {
             status: this.giftForm.status,
             unit: this.giftForm.unit,
             tock: this.giftForm.stock,
-            priceCny:this.giftForm.priceMoney,
+            priceCny:this.giftForm.priceCny,
             warnStock: this.giftForm.warnStock,
-            categoryId: this.num,
+            categoryId: this.childrenId,
             pricePoint: this.giftForm.pricePoint,
-            priceMoney:this.giftForm.priceMoney,
-            goodsPoint:this.priceMoney
       }
             editGoods(finalGoods,this.giftId).then(response=>{
                 this.$notify.success({
@@ -509,28 +507,35 @@ export default {
             this.goods.detailUrl = response.data.url
         },
         getlist(){
-            this.num=this.$route.query.row.categoryId
+            // this.num=this.$route.query.row.categoryId
             this.goods.detailUrl=this.$route.query.row.detailUrl
             this.goods.coverUrl=this.$route.query.row.coverUrl
             this.giftId=this.$route.query.id 
             detailliping(this.giftId).then(response=>{
                 this.giftForm=response.data.data
+                this.giftIdName=response.data.data.categoryId
                 for(var i=0;i<response.data.data.picture.length;i++){
                     this.galleryFileList.push({
                         url: response.data.data.picture[i]
                     })
                 }
+                this.num=this.giftIdName[0]
+                this.childrenId=this.giftIdName[1]
             })
         },
         // 获取礼品分类列表
         giftCat(){
-            listCatAndBrand().then(response=>{
+            listCatAndBrand().then(response=>{  
+                console.log(this.childrenId)
                 this.giftlist=response.data.data.list
                 for(var i=0;i<this.giftlist.length;i++){
                     if(this.num==this.giftlist[i].id){
                         this.childrenlist=this.giftlist[i].children
                         this.firstname=this.giftlist[i].name
                     }
+                }
+                for(var i=0;i<this.childrenlist.length;i++){
+                    this.twoname=this.childrenlist[i].name
                 }
             })
         },

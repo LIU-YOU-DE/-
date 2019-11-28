@@ -44,13 +44,13 @@
         </el-table>
 
         <h3 class="address"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />积分记录</h3>
-        <el-table border style="width:95%;margin:0 auto;margin-bottom:20px;">
-          <el-table-column align="center" label="历史总积分" prop="memberId" />
-          <el-table-column align="center" label="当前积分" prop="memberId" />
-          <el-table-column align="center" label="积分变动" prop="memberId" />
+        <el-table border style="width:95%;margin:0 auto;margin-bottom:20px;" :data="pointHistoryList">
+          <el-table-column align="center" label="历史总积分" prop="historyCountPoint" />
+          <el-table-column align="center" label="当前积分" prop="point" />
+          <el-table-column align="center" label="积分变动" prop="updatePoint" />
           <el-table-column align="center" label="积分变动值" prop="memberId" />
-          <el-table-column align="center" label="积分变动原因" prop="memberId" />
-          <el-table-column align="center" label="更新时间" prop="memberId" />
+          <el-table-column align="center" label="积分变动原因" prop="reason" />
+          <el-table-column align="center" label="更新时间" prop="updateTime" />
         </el-table>
         
         </div>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { getlook,updateAd ,listAddress} from "@/api/user";
+import { getlook,updateAd ,listAddress,listHistory} from "@/api/user";
 export default {
   data() {
     return {
@@ -102,6 +102,7 @@ export default {
         wxOpenId: "",
         birthday: ""
       },
+      pointHistoryList:[],
       addresslist:[],
       listQuery: {
         page: 1,
@@ -111,11 +112,16 @@ export default {
         sort: "add_time",
         order: "desc"
       },
+      pointHistory: {
+        page: 1,
+        limit: 20,
+        memberId: undefined,
+        mobile: undefined,
+        sort: "update_time",
+        order: "desc"
+      },
     };
   },
-  // created(){
-  //   this.getuseraddress()
-  // },
   methods: {
     gousereip(){
       this.$router.push({path:"/test/userip",query:{id:this.list.memberId }})
@@ -135,14 +141,20 @@ export default {
           }
         }
       },
-    getuseraddress(){
-      this.listQuery.userId=this.list.memberId
-      listAddress(this.listQuery).then(response=>{
-        console.log(response)
-      })
-    },
+    // getuseraddress(){
+    //   this.listQuery.userId=this.list.memberId
+    //   listAddress(this.listQuery).then(response=>{
+    //     console.log(response)
+    //   })
+    // },
     back(){
       this.$router.go(-1)
+    },
+    getHistoryPoint(){
+      this.pointHistory.memberId=this.$route.query.id;
+      listHistory(this.pointHistory).then(response=>{
+        this.pointHistoryList=response.data.data.list
+      })
     },
     getlist() {
       const goodsId = this.$route.query.id;
@@ -157,31 +169,11 @@ export default {
     },
     handleEdit: function() {
       this.$router.push({path:"/test/useredit",query: { list: this.list }})
-      // const finalGoods = {
-      //   mobile: this.list.mobile,
-      //   remark: this.list.remark,
-      //   status: this.list.status
-      // };
-      // updateAd(finalGoods, this.upid)
-      //   .then(response => {
-      //     this.$notify.success({
-      //       title: "成功",
-      //       message: "更新成功"
-      //     });
-      //     this.$router.push({ path: "/test/user" });
-      //   })
-      //   .catch(response => {
-      //     MessageBox.alert("业务错误：" + response.data.errmsg, "警告", {
-      //       confirmButtonText: "确定",
-      //       type: "error"
-      //     });
-      //   });
-
-
     }
   },
   created() {
     this.getlist();
+    this.getHistoryPoint()
   }
 };
 </script>

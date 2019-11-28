@@ -152,28 +152,34 @@
               <div class="order-left">
                 <p style="font-size:14px;">本月兑换积分</p>
                 <p style="font-size:25px;color:#666;font-weight:600;">{{thisMonthPoint}}</p>
-                <span style="color:#19B161">{{monthPointSum}}</span>
+                <svg-icon icon-class="top" class-name="card-panel-icon svg" v-if="monthPoint > 0 "/>
+                <svg-icon icon-class="bottom" class-name="card-panel-icon svg" v-if="monthPoint  < 0 "/>
+                <span :class="[monthPoint>0?'top':'bottom']">{{monthPointSum}}</span>
                 <span style="font-size:14px;color:#999;">同比上月</span>
               </div>
               <div class="order-left" style="margin-top:20px;">
                 <p style="font-size:14px;">本周兑换积分</p>
                 <p style="font-size:25px;color:#666;font-weight:600;">{{thisWeekPoint}}</p>
-                <span style="color:#19B161">{{weekPointSum}}</span>
+                <svg-icon icon-class="top" class-name="card-panel-icon svg" v-if="weekPoint > 0 "/>
+                <svg-icon icon-class="bottom" class-name="card-panel-icon svg" v-if="weekPoint  < 0 "/>
+                <span :class="[weekPoint>0?'top':'bottom']">{{weekPointSum}}</span>
                 <span style="font-size:14px;color:#999;">同比上周</span>
               </div>
             </div>
             <div  class="order-right">
                 <div style="display:flex;justify-content:flex-end;margin-right:30px;margin-top:20px;width:100%;">
                   <div style="display:flex;margin-top:10px;">
-                    <p :class="{red:isToday}" @click="showToday" style="cursor:pointer;">今日</p>
-                    <p style="margin-left:20px;margin-right:20px;cursor:pointer;" :class="{red:isWeek}" @click="showWeek">本周</p>
-                    <p :class="{red:isMonth}" @click="showMonth" style="cursor:pointer;">本月</p>
+                    <p :class="{red:isToday}" @click="showToday()" style="cursor:pointer;">今日</p>
+                    <p style="margin-left:20px;margin-right:20px;cursor:pointer;" :class="{red:isWeek}" @click="showWeek()">本周</p>
+                    <p :class="{red:isMonth}" @click="showMonth()" style="cursor:pointer;">本月</p>
                   </div>
                   <el-date-picker
-                    v-model="date"
                     style="margin-right:30px;margin-left:20px;"
                     type="daterange"
+                    @change="handPointdate"
                     range-separator="至"
+                    v-model="pointDate"
+                    value-format="yyyy-MM-dd"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                   </el-date-picker>
@@ -193,28 +199,34 @@
               <div class="order-left">
                 <p style="font-size:14px;">本月订单总数</p>
                 <p style="font-size:25px;color:#666;font-weight:600;">{{thisMonthCount}}</p>
-                <span>{{monthOrderSum}}</span>
+                <svg-icon icon-class="top" class-name="card-panel-icon svg" v-if="orderSum > 0 "/>
+                <svg-icon icon-class="bottom" class-name="card-panel-icon svg" v-if="orderSum  < 0 "/>
+                <span :class="[orderSum>0?'top':'bottom']">{{monthOrderSum}}</span>
                 <span style="font-size:14px;color:#999;">同比上月</span>
               </div>
               <div class="order-left" style="margin-top:20px;">
                 <p style="font-size:14px;">本周订单总数</p>
                 <p style="font-size:25px;color:#666;font-weight:600;">{{thisWeekCount}}</p>
-                <span>{{weekOrderSum}}</span>
+                <svg-icon icon-class="top" class-name="card-panel-icon svg" v-if="weekOrder > 0 "/>
+                <svg-icon icon-class="bottom" class-name="card-panel-icon svg" v-if="weekOrder  < 0 "/>
+                <span :class="[weekOrder>0?'top':'bottom']">{{weekOrderSum}}</span>
                 <span style="font-size:14px;color:#999;">同比上周</span>
               </div>
             </div>
             <div class="order-right">
               <div style="display:flex;justify-content:flex-end;margin-right:30px;margin-top:20px;width:100%;">
                   <div style="display:flex;margin-top:10px;">
-                    <p :class="{orderred:isOrderToday}" @click="showOrderToday" style="cursor:pointer;">今日</p>
-                    <p style="margin-left:20px;margin-right:20px;cursor:pointer;" :class="{orderred:isOrderWeek}" @click="showOrderWeek">本周</p>
-                    <p :class="{orderred:isOrderMonth}" @click="showOrderMonth" style="cursor:pointer;">本月</p>
+                    <p :class="{orderred:isOrderToday}" @click="showOrderToday()" style="cursor:pointer;">今日</p>
+                    <p style="margin-left:20px;margin-right:20px;cursor:pointer;" :class="{orderred:isOrderWeek}" @click="showOrderWeek()">本周</p>
+                    <p :class="{orderred:isOrderMonth}" @click="showOrderMonth()" style="cursor:pointer;">本月</p>
                   </div>
                   <el-date-picker
-                    v-model="date"
                     style="margin-right:30px;margin-left:20px;"
                     type="daterange"
+                    v-model="orderDate"
                     range-separator="至"
+                    @change="handOrderDate"
+                    value-format="yyyy-MM-dd"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                   </el-date-picker>
@@ -225,7 +237,7 @@
         </div>
 
         <!-- 销售统计 -->
-        <div style="border:1px solid #DCDFE6;margin-top:20px">
+        <div style="border:1px solid #DCDFE6;margin-top:20px;margin-bottom:30px;">
           <div class="tabletop">
             <p class="table-title">销售统计</p>
           </div>
@@ -233,13 +245,19 @@
             <div>
               <div class="order-left">
                 <p style="font-size:14px;">本月销售总额</p>
-                <p style="font-size:25px;color:#666;font-weight:600;">1000</p>
-                <p style="font-size:14px;color:#999;">同比上月</p>
+                <p style="font-size:25px;color:#666;font-weight:600;">{{thisMonthOrderPrize}}</p>
+                <svg-icon icon-class="top" class-name="card-panel-icon svg" v-if="monthOrderPrize > 0 "/>
+                <svg-icon icon-class="bottom" class-name="card-panel-icon svg" v-if="monthOrderPrize  < 0 "/>
+                <span :class="[monthOrderPrize>0?'top':'bottom']">{{monthOrderPrizeSum}}</span>
+                <span style="font-size:14px;color:#999;">同比上月</span>
               </div>
               <div class="order-left" style="margin-top:20px;">
                 <p style="font-size:15px;">本周销售总额</p>
-                <p style="font-size:25px;color:#666;font-weight:600;">1000</p>
-                <p style="font-size:14px;color:#999;">同比上周</p>
+                <p style="font-size:25px;color:#666;font-weight:600;">{{thisWeekOrderPrize}}</p>
+                <svg-icon icon-class="top" class-name="card-panel-icon svg" v-if="weekOrderPrize > 0 "/>
+                <svg-icon icon-class="bottom" class-name="card-panel-icon svg" v-if="weekOrderPrize  < 0 "/>
+                <span :class="[weekOrderPrize>0?'top':'bottom']">{{weekOrderPrizeSum}}</span>
+                <span style="font-size:14px;color:#999;">同比上周</span>
               </div>
             </div>
             <div class="order-right">
@@ -250,10 +268,12 @@
                     <p :class="{ordetotalrred:isMonthOrderTotal}" @click="showOrderTotalMonth" style="cursor:pointer;">本月</p>
                   </div>
                   <el-date-picker
-                    v-model="date"
                     style="margin-right:30px;margin-left:20px;"
                     type="daterange"
+                    v-model="orderPrizeDate"
                     range-separator="至"
+                    @change="handOrderPrizeDate"
+                    value-format="yyyy-MM-dd"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期">
                   </el-date-picker>
@@ -270,6 +290,15 @@
 *{
   padding:0;
   margin:0;
+}
+.top{
+  color:#19B161;
+}
+.bottom{
+  color:red;
+}
+.svg{
+  font-size: 13px;
 }
 .ordetotalrred{
   color:blue;
@@ -371,12 +400,27 @@
 </style>
 
 <script>
-import { info,getPoint,getOrderPoint } from "@/api/dashboard";
+import { info,getPoint,getOrderPoint,
+getOrderPrize,
+getPointCustom,
+getorderPrizeCustom,
+getOrderCustom } from "@/api/dashboard";
 import { resolve, reject } from 'q';
 
 export default {
   data(){
     return {
+        pointDate:'',
+        orderDate:'',
+        orderPrizeDate:'',
+        thisWeekOrderPrize:0,
+        thisMonthOrderPrize:0,
+        lastMonthOrderPrize:0,
+        lastWeekOrderPrize:0,
+        orderPrizeList:[],
+        weekOrderPrizeList:[],
+        dayOrderPrizeList:[],
+        monthOrderPrizeList:[],
         orderList:[],
         weekDashBoardOrderVos:[],
         monthDashBoardOrderVos:[],
@@ -390,9 +434,17 @@ export default {
         lastMonthPoint:0,
         thisMonthPoint:0,
         monthOrderSum:0,
+        orderSum:undefined,
+        weekOrder:undefined,
+        monthPoint:undefined,
+        weekPoint:undefined,
+        monthOrderPrize:undefined,
+        weekOrderPrize:undefined,
         weekOrderSum:0,
         monthPointSum:0,
         weekPointSum:0,
+        monthOrderPrizeSum:0,
+        weekOrderPrizeSum:0,
         isTodayOrderTotal:false,
         isWeekOrderTotal:true,
         isMonthOrderTotal:false,
@@ -403,7 +455,6 @@ export default {
         isMonth:false,
         isWeek:true,
         isToday:false,
-        date:'',
         arr:[],
         carOrderCount:0,
         giftCount:0,
@@ -424,20 +475,59 @@ export default {
         list:[],
         weekDashBoardPointVos:[],
         monthDashBoardPointVos:[],
-        dayDashBoardPointVos:[]
+        todayDashBoardPointVos:[],
+        dayDashBoardPointVos:[],
+        orderWeekCount:[],
+        listQuery:{
+          endTime:undefined,
+          startTime:undefined
+        }
     }
   },
   created(){
     this.getList()
     this.getPointList()
     this.getOrderList()
-  },
-  mounted(){
-    this.drawLine()
-    this.orderTotalCharts()
-    this.orderCharts()
+    this.getOrderPrizeList()
   },
   methods:{
+    handPointdate(time){
+      this.listQuery.startTime=time[0]
+      this.listQuery.endTime=time[1]
+      var pointList=[]
+      var date=[]
+      var pointArr=[]
+      getPointCustom(this.listQuery).then(response=>{
+        pointList=response.data.data
+        for(let i in pointList){
+          date.push(pointList[i].date)
+          pointArr.push(pointList[i].pointCount)
+        }
+        let myChart = this.$echarts.init(document.getElementById('myChart'))
+        myChart.clear();
+      myChart.setOption({
+        title: { text: '指定时间段积分统计' },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#DBEEFC'
+            }
+          }
+            },
+            xAxis: {
+                data:date
+            },
+            yAxis: {},
+            series: [{
+                name: '积分兑换量',
+                type: 'line',
+                data:pointArr
+            }]
+        })
+      })
+    },
     // 获取百分比
     GetPercent(num, total) {
       num = parseFloat(num);
@@ -498,19 +588,56 @@ export default {
     showOrderBox(){
       this.showBox=false
     },
-    showMonth(){
-      this.isMonth=true
-      this.isWeek=false
-      this.isToday=false
+    // 积分
+    drawLine(id){
       var now = new Date();  
       var nowTime = now.getTime();  
       var day = now.getDay();  
       var oneDayLong = 24 * 60 * 60 * 1000; 
-      var month=now.getMonth()+1
-      var day=this.getWeeks(2019,month)
-      var arr=[]
-      for(var i=1;i<=day;i++){
-        arr.push(this.getWeekTime(2019,month,i))
+      var date=[]
+      for (var i = 1; i < 8; i++) {  
+        var SundayTime = nowTime + (i - day) * oneDayLong;  
+        var SundayTime = new Date(SundayTime);  
+        var y = SundayTime.getFullYear();//年  
+        var m = SundayTime.getMonth() + 1;//月  
+        var d = SundayTime.getDate();//日  
+        var h = SundayTime.getHours();//时  
+        var mm = SundayTime.getMinutes();//分  
+        var s = SundayTime.getSeconds();//秒  
+        date.push(m+'-'+d)
+      }  
+      let myChart = this.$echarts.init(document.getElementById(id))
+      myChart.setOption({
+        title: { text: '本周积分统计' },
+        tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'cross',
+          label: {
+            backgroundColor: '#DBEEFC'
+          }
+        }
+        },
+        xAxis: {
+          data:date
+        },
+        yAxis: {},
+          series: [{
+            name: '积分兑换量',
+            type: 'line',
+            data:this.weekDashBoardPointVos
+        }]
+      })
+    },
+    showMonth(){
+      this.isMonth=true
+      this.isWeek=false
+      this.isToday=false
+      var date=[]
+      var pointCount=[]
+      for(let i in this.monthDashBoardPointVos){
+        date.push(this.monthDashBoardPointVos[i].date)
+        pointCount.push(this.monthDashBoardPointVos[i].pointCount)
       }
       let myChart = this.$echarts.init(document.getElementById('myChart'))
       myChart.setOption({
@@ -525,13 +652,22 @@ export default {
           }
             },
             xAxis: {
-                data:arr
+                data:date
             },
+            dataZoom: [{
+              type: 'slider',
+              show: true,
+              xAxisIndex: [0],
+              left: '9%',
+              bottom: -5,
+              start: 0,
+              end: 50
+            }] ,
             yAxis: {},
             series: [{
                 name: '积分兑换量',
                 type: 'line',
-                data:[100,250,865,411,354,699,445,666]
+                data:pointCount
             }]
         })
     },
@@ -556,6 +692,7 @@ export default {
         date.push(m+'-'+d)
       }
       let myChart = this.$echarts.init(document.getElementById('myChart'))
+      myChart.clear();
       myChart.setOption({
         title: { text: '本周积分统计' },
         tooltip: {
@@ -574,10 +711,10 @@ export default {
             series: [{
                 name: '积分兑换量',
                 type: 'line',
-                data:[88,444,562,763,326,951,264]
+                data:this.weekDashBoardPointVos
             }]
         })
-
+        
     },
     showToday(){
       this.isToday=true
@@ -588,18 +725,11 @@ export default {
       var day = now.getDay();  
       var oneDayLong = 24 * 60 * 60 * 1000; 
       var date=[]
-      for (var i = 1; i < 8; i++) {  
-        var SundayTime = nowTime + (i - day) * oneDayLong;  
-        var SundayTime = new Date(SundayTime);  
-        var y = SundayTime.getFullYear();//年  
-        var m = SundayTime.getMonth() + 1;//月  
-        var d = SundayTime.getDate();//日  
-        var h = SundayTime.getHours();//时  
-        var mm = SundayTime.getMinutes();//分  
-        var s = SundayTime.getSeconds();//秒  
-        date.push(m+'-'+d)
-      }
+      var m =now.getMonth() + 1;
+      var d =now.getDate();
+      date.push(m+'-'+d)
       let myChart = this.$echarts.init(document.getElementById('myChart'))
+      myChart.clear();
       myChart.setOption({
         title: { text: '今日积分统计' },
         tooltip: {
@@ -618,7 +748,7 @@ export default {
             series: [{
                 name: '积分兑换量',
                 type: 'line',
-                data:[964,452,466,478,541,641]
+                data:this.todayDashBoardPointVos
             }]
         })
     },
@@ -631,16 +761,22 @@ export default {
         this.thisMonthCount=this.orderList.thisMonthCount
         this.thisWeekCount=this.orderList.thisWeekCount
         for(let i in this.orderList.monthDashBoardOrderVos){
-         this.monthDashBoardPointVos.push(this.orderList.monthDashBoardOrderVos[i])
+         this.monthDashBoardOrderVos.push(this.orderList.monthDashBoardOrderVos[i])
         }
+        var sum=0
         for(let i in this.orderList.dayDashBoardOrderVos){
-         this.dayDashBoardOrderVos.push(this.orderList.dayDashBoardOrderVos[i])
+         sum+=(this.orderList.dayDashBoardOrderVos[i].orderCount)
         }
+        this.dayDashBoardOrderVos.push(sum)
+        
         for(let i in this.orderList.weekDashBoardOrderVos){
-         this.weekDashBoardOrderVos.push(this.orderList.weekDashBoardOrderVos[i])
+         this.weekDashBoardOrderVos.push(this.orderList.weekDashBoardOrderVos[i].orderCount)
         }
-        this.monthOrderSum=this.GetPercent(this.thisMonthCount,this.lastMonthCount)
-        this.weekOrderSum=this.GetPercent(this.thisWeekCount,this.lastWeekCount)
+        this.orderCharts('orderMyChart')
+        this.orderSum=this.thisMonthCount-this.lastMonthCount
+        this.weekOrder=this.thisWeekCount-this.lastWeekCount
+        this.monthOrderSum=100-parseFloat(this.GetPercent(this.lastWeekCount,this.thisWeekCount))+'%'
+        this.weekOrderSum=100-parseFloat(this.GetPercent(this.lastWeekCount,this.thisWeekCount))+'%'
       })
     },
     // 获取积分数
@@ -652,13 +788,92 @@ export default {
         this.thisWeekPoint=response.data.data.thisWeekPoint
         this.lastWeekPoint=response.data.data.lastWeekPoint
         for(let i in this.list.weekDashBoardPointVos){
-          this.weekDashBoardPointVos.push(this.list.weekDashBoardPointVos[i])
+          this.weekDashBoardPointVos.push(this.list.weekDashBoardPointVos[i].pointCount)
         }
-        this.monthPointSum=this.GetPercent(this.thisMonthPoint,this.lastMonthPoint)
-        this.weekPointSum=this.GetPercent(this.thisWeekPoint,this.lastWeekPoint)
+        for(let i in this.list.monthDashBoardPointVos){
+          this.monthDashBoardPointVos.push(this.list.monthDashBoardPointVos[i])
+        }
+        var sum=0
+        for(let i in this.list.dayDashBoardPointVos){
+         sum+=this.list.dayDashBoardPointVos[i].pointCount
+        }
+        this.todayDashBoardPointVos.push(sum)
+        this.drawLine('myChart')
+        this.monthPoint=this.thisMonthPoint-this.lastMonthPoint
+        this.weekPoint=this.thisWeekPoint-this.lastWeekPoint
+        this.monthPointSum=100-parseFloat(this.GetPercent(this.lastMonthPoint,this.thisMonthPoint))+'%'
+        this.weekPointSum=100-parseFloat(this.GetPercent(this.lastWeekPoint,this.thisWeekPoint))+'%'
+      })
+    },
+    // 获取销售额
+    getOrderPrizeList(){
+      getOrderPrize().then(response=>{
+        this.orderPrizeList=response.data.data
+        this.thisMonthOrderPrize=response.data.data.thisMonthOrderPrize
+        this.thisWeekOrderPrize=response.data.data.thisWeekOrderPrize
+        this.lastMonthOrderPrize=response.data.data.lastMonthOrderPrize
+        this.lastWeekOrderPrize=response.data.data.lastWeekOrderPrize
+        for(let i in this.orderPrizeList.monthDashBoardOrderPrizeVos){
+          this.monthOrderPrizeList.push(this.orderPrizeList.monthDashBoardOrderPrizeVos[i])
+        }
+        for(let i in this.orderPrizeList.weekDashBoardOrderPrizeVos){
+          this.weekOrderPrizeList.push(this.orderPrizeList.weekDashBoardOrderPrizeVos[i].orderPrizeCount)
+        }
+        var sum=0
+        for(let i in this.orderPrizeList.dayDashBoardOrderPrizeVos){
+          sum+=this.orderPrizeList.dayDashBoardOrderPrizeVos[i].orderPrizeCount
+        }
+        this.dayOrderPrizeList.push(sum)
+        this.orderTotalCharts('orderTotalCharts')
+        this.monthOrderPrize=this.thisMonthOrderPrize-this.lastMonthOrderPrize
+        this.weekOrderPrize=this.thisWeekOrderPrize-this.lastWeekOrderPrize
+        this.monthOrderPrizeSum=100-parseFloat(this.GetPercent(this.lastMonthOrderPrize,this.thisMonthOrderPrize))+'%'
+        this.weekOrderPrizeSum=100-parseFloat(this.GetPercent(this.lastWeekOrderPrize,this.thisWeekOrderPrize))+'%'
       })
     },
     //订单
+    handOrderDate(time){
+      var orderQuery={
+        startTime:undefined,
+        endTime:undefined
+      }
+      orderQuery.startTime=time[0]
+      orderQuery.endTime=time[1]
+      var orderList=[]
+      var date=[]
+      var orderCount=[]
+      getOrderCustom(orderQuery).then(response=>{
+        orderList=response.data.data
+        for(let i in orderList){
+          date.push(orderList[i].date)
+          orderCount.push(orderList[i].orderCount)
+        }
+      let myChart = this.$echarts.init(document.getElementById('orderMyChart'))
+      myChart.clear();
+      myChart.setOption({
+        title: { text: '指定时间段订单统计' },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#DBEEFC'
+            }
+          }
+            },
+            xAxis: {
+                data:date
+            },
+            yAxis: {},
+            series: [{
+                name: '订单数量',
+                type: 'line',
+                data:orderCount
+            }]
+        })
+      })
+      
+    },
     showOrderToday(){
       this.isOrderToday=true
       this.isOrderMonth=false
@@ -668,18 +883,11 @@ export default {
       var day = now.getDay();  
       var oneDayLong = 24 * 60 * 60 * 1000; 
       var date=[]
-      for (var i = 1; i < 8; i++) {  
-        var SundayTime = nowTime + (i - day) * oneDayLong;  
-        var SundayTime = new Date(SundayTime);  
-        var y = SundayTime.getFullYear();//年  
-        var m = SundayTime.getMonth() + 1;//月  
-        var d = SundayTime.getDate();//日  
-        var h = SundayTime.getHours();//时  
-        var mm = SundayTime.getMinutes();//分  
-        var s = SundayTime.getSeconds();//秒  
-        date.push(m+'-'+d)
-      }
+      var m =now.getMonth() + 1;
+      var d =now.getDate();
+      date.push(m+'-'+d)
       let myChart = this.$echarts.init(document.getElementById('orderMyChart'))
+      myChart.clear()
       myChart.setOption({
         title: { text: '今日订单统计' },
         tooltip: {
@@ -698,7 +906,7 @@ export default {
             series: [{
                 name: '订单数量',
                 type: 'line',
-                data:[153,652,45,125,778,65,124]
+                data:this.dayDashBoardOrderVos
             }]
         })
     },
@@ -706,15 +914,12 @@ export default {
       this.isOrderToday=false
       this.isOrderMonth=true
       this.isOrderWeek=false
-      var now = new Date();  
-      var nowTime = now.getTime();  
-      var day = now.getDay();  
-      var oneDayLong = 24 * 60 * 60 * 1000; 
-      var month=now.getMonth()+1
-      var day=this.getWeeks(2019,month)
-      var arr=[]
-      for(var i=1;i<=day;i++){
-        arr.push(this.getWeekTime(2019,month,i))
+      var monthOrder=[]
+      var date=[]
+      var orderCount=[]
+      for(let i in this.monthDashBoardOrderVos){
+        date.push(this.monthDashBoardOrderVos[i].date)
+        orderCount.push(this.monthDashBoardOrderVos[i].orderCount)
       }
       let myChart = this.$echarts.init(document.getElementById('orderMyChart'))
       myChart.setOption({
@@ -729,13 +934,22 @@ export default {
           }
             },
             xAxis: {
-                data:arr
+                data:date
             },
+            dataZoom: [{
+              type: 'slider',
+              show: true,
+              xAxisIndex: [0],
+              left: '9%',
+              bottom: -5,
+              start: 0,
+              end: 50
+            }] ,
             yAxis: {},
             series: [{
                 name: '订单数量',
                 type: 'line',
-                data:[534,610,243,879,456,456,123]
+                data:orderCount
             }]
         })
     },
@@ -760,6 +974,7 @@ export default {
         date.push(m+'-'+d)
       }
       let myChart = this.$echarts.init(document.getElementById('orderMyChart'))
+      myChart.clear()
       myChart.setOption({
         title: { text: '本周订单统计' },
         tooltip: {
@@ -778,28 +993,28 @@ export default {
             series: [{
                 name: '订单数量',
                 type: 'line',
-                data:[120,123,410,263,487,674,134]
+                data:this.weekDashBoardOrderVos
             }]
         })
     },
-    orderCharts(){
-            var now = new Date();  
-            var nowTime = now.getTime();  
-            var day = now.getDay();  
-            var oneDayLong = 24 * 60 * 60 * 1000; 
-            var date=[]
-            for (var i = 1; i < 8; i++) {  
-                var SundayTime = nowTime + (i - day) * oneDayLong;  
-                var SundayTime = new Date(SundayTime);  
-                var y = SundayTime.getFullYear();//年  
-                var m = SundayTime.getMonth() + 1;//月  
-                var d = SundayTime.getDate();//日  
-                var h = SundayTime.getHours();//时  
-                var mm = SundayTime.getMinutes();//分  
-                var s = SundayTime.getSeconds();//秒  
-                date.push(m+'-'+d)
-            }  
-        let myChart = this.$echarts.init(document.getElementById('orderMyChart'))
+    orderCharts(id){
+      var now = new Date();  
+      var nowTime = now.getTime();  
+      var day = now.getDay();  
+      var oneDayLong = 24 * 60 * 60 * 1000; 
+      var date=[]
+      for (var i = 1; i < 8; i++) {  
+        var SundayTime = nowTime + (i - day) * oneDayLong;  
+        var SundayTime = new Date(SundayTime);  
+        var y = SundayTime.getFullYear();//年  
+        var m = SundayTime.getMonth() + 1;//月  
+        var d = SundayTime.getDate();//日  
+        var h = SundayTime.getHours();//时  
+        var mm = SundayTime.getMinutes();//分  
+        var s = SundayTime.getSeconds();//秒  
+          date.push(m+'-'+d)
+        }  
+        let myChart = this.$echarts.init(document.getElementById(id))
         myChart.setOption({
             title: { text: '本周订单统计' },
             tooltip: {
@@ -818,93 +1033,128 @@ export default {
             series: [{
                 name: '订单数量统计',
                 type: 'line',
-                data:[120,654,35,856,452,254,360]
+                data:this.weekDashBoardOrderVos
             }]
         })
     },
     // 销售额
-    orderTotalCharts(){
-            var now = new Date();  
-            var nowTime = now.getTime();  
-            var day = now.getDay();  
-            var oneDayLong = 24 * 60 * 60 * 1000; 
-            var date=[]
-            for (var i = 1; i < 8; i++) {  
-                var SundayTime = nowTime + (i - day) * oneDayLong;  
-                var SundayTime = new Date(SundayTime);  
-                var y = SundayTime.getFullYear();//年  
-                var m = SundayTime.getMonth() + 1;//月  
-                var d = SundayTime.getDate();//日  
-                var h = SundayTime.getHours();//时  
-                var mm = SundayTime.getMinutes();//分  
-                var s = SundayTime.getSeconds();//秒  
-                date.push(m+'-'+d)
-            }  
+    handOrderPrizeDate(time){
+      var orderPrize={
+        startTime:undefined,
+        endTime:undefined
+      }
+      orderPrize.startTime=time[0]
+      orderPrize.endTime=time[1]
+      var orderPrizeList=[]
+      var date=[]
+      var orderPrizeCount=[]
+      getorderPrizeCustom(orderPrize).then(response=>{
+        orderPrizeList=response.data.data
+        for(let i in orderPrizeList){
+          date.push(orderPrizeList[i].date)
+          orderPrizeCount.push(orderPrizeList[i].orderPrizeCount)
+        }
         let myChart = this.$echarts.init(document.getElementById('orderTotalCharts'))
+        myChart.clear()
         myChart.setOption({
-            title: { text: '本周销售额统计' },
-            tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                type: 'cross',
-                label: {
-                  backgroundColor: '#DBEEFC'
-                }
-              }
-            },
-            xAxis: {
-                data:date
-            },
-            yAxis: {},
-            series: [{
-                name: '销售额数量',
-                type: 'line',
-                data:[88,52,45,36,54,87,96]
-            }]
-        })
+        title: { text: '指定时间段销售额统计' },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#DBEEFC'
+            }
+          }
+        },
+        xAxis: {
+          data:date
+        },
+        yAxis: {},
+        series: [{
+          name: '销售额数量',
+          type: 'line',
+          data:orderPrizeCount
+        }]
+      })
+      })
+    },
+    orderTotalCharts(id){
+      var now = new Date();  
+      var nowTime = now.getTime();  
+      var day = now.getDay();  
+      var oneDayLong = 24 * 60 * 60 * 1000; 
+      var date=[]
+      for (var i = 1; i < 8; i++) {  
+        var SundayTime = nowTime + (i - day) * oneDayLong;  
+        var SundayTime = new Date(SundayTime);  
+        var y = SundayTime.getFullYear();//年  
+        var m = SundayTime.getMonth() + 1;//月  
+        var d = SundayTime.getDate();//日  
+        var h = SundayTime.getHours();//时  
+        var mm = SundayTime.getMinutes();//分  
+        var s = SundayTime.getSeconds();//秒  
+        date.push(m+'-'+d)
+      }  
+      let myChart = this.$echarts.init(document.getElementById(id))
+      myChart.clear()
+      myChart.setOption({
+        title: { text: '本周销售额统计' },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#DBEEFC'
+            }
+          }
+        },
+        xAxis: {
+          data:date
+        },
+        yAxis: {},
+        series: [{
+          name: '销售额数量',
+          type: 'line',
+          data:this.weekOrderPrizeList
+        }]
+      })
     },
     showOrderTotalToday(){
       this.isTodayOrderTotal=true
       this.isMonthOrderTotal=false
       this.isWeekOrderTotal=false
       var now = new Date();  
-            var nowTime = now.getTime();  
-            var day = now.getDay();  
-            var oneDayLong = 24 * 60 * 60 * 1000; 
-            var date=[]
-            for (var i = 1; i < 8; i++) {  
-                var SundayTime = nowTime + (i - day) * oneDayLong;  
-                var SundayTime = new Date(SundayTime);  
-                var y = SundayTime.getFullYear();//年  
-                var m = SundayTime.getMonth() + 1;//月  
-                var d = SundayTime.getDate();//日  
-                var h = SundayTime.getHours();//时  
-                var mm = SundayTime.getMinutes();//分  
-                var s = SundayTime.getSeconds();//秒  
-                date.push(m+'-'+d)
-            }  
-        let myChart = this.$echarts.init(document.getElementById('orderTotalCharts'))
-        myChart.setOption({
-            title: { text: '今日销售额统计' },
-            tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                type: 'cross',
-                label: {
-                  backgroundColor: '#DBEEFC'
-                }
-              }
-            },
-            xAxis: {
-                data:date
-            },
-            yAxis: {},
-            series: [{
-                name: '销售额数量',
-                type: 'line',
-                data:[88,56,25,98,63,78,42]
-            }]
-        })
+      var nowTime = now.getTime();  
+      var day = now.getDay();  
+      var oneDayLong = 24 * 60 * 60 * 1000; 
+      var date=[]
+      var m=now.getMonth()+1
+      var d=now.getDate()
+      date.push(m+'-'+d)
+      let myChart = this.$echarts.init(document.getElementById('orderTotalCharts'))
+      myChart.clear()
+      myChart.setOption({
+        title: { text: '今日销售额统计' },
+        tooltip: {
+        trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#DBEEFC'
+            }
+          }
+        },
+        xAxis: {
+          data:date
+        },
+        yAxis: {},
+        series: [{
+          name: '销售额数量',
+          type: 'line',
+          data:this.dayOrderPrizeList
+        }]
+      })
     },
     showOrderTotalWeek(){
       this.isTodayOrderTotal=false
@@ -927,6 +1177,7 @@ export default {
                 date.push(m+'-'+d)
             }  
         let myChart = this.$echarts.init(document.getElementById('orderTotalCharts'))
+        myChart.clear()
         myChart.setOption({
             title: { text: '本周销售额统计' },
             tooltip: {
@@ -945,7 +1196,7 @@ export default {
             series: [{
                 name: '销售额数量',
                 type: 'line',
-                data:[88,26,38,79,51,63,46]
+                data:this.weekOrderPrizeList
             }]
         })
     },
@@ -953,16 +1204,12 @@ export default {
       this.isTodayOrderTotal=false
       this.isMonthOrderTotal=true
       this.isWeekOrderTotal=false
-      var now = new Date();  
-            var nowTime = now.getTime();  
-            var day = now.getDay();  
-            var oneDayLong = 24 * 60 * 60 * 1000; 
-            var month=now.getMonth()+1
-            var day=this.getWeeks(2019,month)
-            var arr=[]
-            for(var i=1;i<=day;i++){
-                arr.push(this.getWeekTime(2019,month,i))
-            }  
+      var date=[]
+      var orderPrizeCount=[]
+      for(let i in this.monthOrderPrizeList){
+        date.push(this.monthOrderPrizeList[i].date)
+        orderPrizeCount.push(this.monthOrderPrizeList[i].orderPrizeCount)
+      } 
         let myChart = this.$echarts.init(document.getElementById('orderTotalCharts'))
         myChart.setOption({
             title: { text: '本月销售额统计' },
@@ -976,64 +1223,32 @@ export default {
               }
             },
             xAxis: {
-                data:arr
+                data:date
             },
+            dataZoom: [{
+              type: 'slider',
+              show: true,
+              xAxisIndex: [0],
+              left: '9%',
+              bottom: -5,
+              start: 0,
+              end: 70
+            }] ,
             yAxis: {},
             series: [{
                 name: '销售额数量',
                 type: 'line',
-                data:[88,52,45,36,54,87,96]
-            }]
-        })
-    },
-    // 积分
-    drawLine(){
-            var now = new Date();  
-            var nowTime = now.getTime();  
-            var day = now.getDay();  
-            var oneDayLong = 24 * 60 * 60 * 1000; 
-            var date=[]
-            for (var i = 1; i < 8; i++) {  
-                var SundayTime = nowTime + (i - day) * oneDayLong;  
-                var SundayTime = new Date(SundayTime);  
-                var y = SundayTime.getFullYear();//年  
-                var m = SundayTime.getMonth() + 1;//月  
-                var d = SundayTime.getDate();//日  
-                var h = SundayTime.getHours();//时  
-                var mm = SundayTime.getMinutes();//分  
-                var s = SundayTime.getSeconds();//秒  
-                date.push(m+'-'+d)
-            }  
-        let myChart = this.$echarts.init(document.getElementById('myChart'))
-        myChart.setOption({
-            title: { text: '本周积分统计' },
-            tooltip: {
-              trigger: 'axis',
-              axisPointer: {
-                type: 'cross',
-                label: {
-                  backgroundColor: '#DBEEFC'
-                }
-              }
-            },
-            xAxis: {
-                data:date
-            },
-            yAxis: {},
-            series: [{
-                name: '积分兑换量',
-                type: 'line',
-                data:[88,444,562,763,326,951,264]
+                data:orderPrizeCount
             }]
         })
     },
   getList(){
       info().then(response => {
-        console.log(response)
         this.carOrderCount=response.data.data.carOrderCount
-         this.giftCount=response.data.data.giftCount
+        this.giftCount=response.data.data.giftCount
         this.giftDownCount=response.data.data.giftDownCount
         this.giftUpCount=response.data.data.giftUpCount
+        this.giftOrderCount=response.data.data.giftOrderCount
         this.giftWronStockCount=response.data.data.giftWronStockCount
         this.groupBuyOrderCount=response.data.data.groupBuyOrderCount
         this.lastSevenDaysOrderTotal=response.data.data.lastSevenDaysOrderTotal

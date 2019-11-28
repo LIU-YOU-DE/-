@@ -252,10 +252,10 @@ export default {
     },
     methods:{
         handleChange2(value) {
-             this.listQuery2.giftCategroy=value[0]
+             this.listQuery2.giftCategroy=value[1]
             },
          handleChange(value) {
-             this.listQuery.giftCategroy=value[0]
+             this.listQuery.giftCategroy=value[1]
             },
         giftCat(){
             listCatAndBrand().then(response=>{

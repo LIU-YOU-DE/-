@@ -108,7 +108,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="用户ID" prop="memberId" class="searchboxtitle">
-                <el-input style="width:200px;" placeholder="请输入用户ID" v-model="searchForm.memberId" @input="change($event)"></el-input>
+                <el-input style="width:200px;margin-right:20px;" placeholder="请输入用户ID" v-model="searchForm.memberId" @input="change($event)"></el-input>
             </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -120,38 +120,16 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="用户手机号" prop="mobile" maxlength="11" class="searchboxtitle">
-                <el-input placeholder="请输入用户手机号" style="width:200px;" maxlength="11" v-model="searchForm.mobile" @input="change($event)"></el-input>
-            </el-form-item>
+                  <el-input placeholder="请输入用户手机号" style="width:200px;" maxlength="11" v-model="searchForm.mobile" @input="change($event)"></el-input>
+                </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="出生日期" class="searchboxtitle">
-                  <el-date-picker
-                    v-model="searchForm.birthday"
-                    type="datetime"
-                    placeholder="选择日期"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    style="width:200px;"
-                  />
-                  </el-form-item>
-              </el-col>
-            </el-row>
-            <el-col :span="12">
-              <el-form-item label="注册时间" class="searchboxtitle">
-                <el-date-picker
-                  v-model="searchForm.regday"
-                  type="datetime"
-                  placeholder="选择日期"
-                  value-format="yyyy-MM-dd HH:mm:ss"
-                  style="width:200px;margin-right:30px;"
-                />
-            </el-form-item>
-            </el-col>
-            <el-col :span="12">
               <el-form-item label="账户状态" class="searchboxtitle">
                 <!-- <el-input v-model="searchForm.status" style="width:200px;"></el-input> -->
                 <el-select v-model="status" placeholder="请选择" @change=handUserStatus>
                   <template>
                     <el-option
+                    style="margin-left:20px;"
                     v-for="item in userStaus"
                     :key="item.id"
                     :label="item.value" 
@@ -161,6 +139,26 @@
                   </el-select>
               </el-form-item>
             </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="注册时间" class="searchboxtitle">
+                  <el-date-picker
+                    v-model="time"
+                    type="daterange"
+                    align="right"
+                    style="width:410px;"
+                    value-format="yyyy-MM-dd"
+                    unlink-panels
+                    @change=handRegday
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    >
+                  </el-date-picker>
+                  </el-form-item>
+              </el-col>
+            </el-row>
         </el-form>
           <div slot="footer" class="dialog-footer" style="text-align:right;margin-bottom:20px;" >
             <el-button @click="removeSearchBox" >取 消</el-button>
@@ -189,6 +187,7 @@ export default {
   components: { Pagination },
   data() {
     return {
+      time:undefined,
       popcontainer:false,
       status:undefined,
       userStaus:[
@@ -209,14 +208,16 @@ export default {
           value:"被删除"
         },
       ],
+      createTime:'',
       searchForm:{
         page: 1,
         limit: 20,
-        memberId:"",
-        nickname:"",
-        mobile:"",
-        birthday:"",
-        regday:"",
+        memberId:undefined,
+        addTimeBegin:"",
+        addTimeEnd:"",
+        nickname:undefined,
+        nickname:undefined,
+        mobile:undefined,
         sort: "add_time",
         order: "desc"
       },
@@ -243,6 +244,11 @@ export default {
     this.getList();
   },
   methods: {
+    handRegday(time){
+      this.searchForm.addTimeBegin=time[0]
+      this.searchForm.addTimeEnd=time[1]
+      console.log(typeof(this.searchForm.addTimeBegin)=='string')
+    },
     handUserStatus(event){
       for(var i=0;i<this.userStaus.length;i++){
         if(event==this.userStaus[i].value)
@@ -272,8 +278,8 @@ export default {
         this.searchForm.memberId=undefined
         this.searchForm.nickname=undefined
         this.searchForm.mobile=undefined
-        this.searchForm.birthday=undefined
-        this.searchForm.regday=undefined
+        this.searchForm.addTimeBegin=''
+        this.searchForm.addTimeEnd=''
         this.status=undefined
         this.dialogVisible=false
         this.popcontainer=false
@@ -284,7 +290,6 @@ export default {
       fetchList(this.listQuery)
         .then(response => {
           this.list = response.data.data.list;
-          console.log(this.list)
           this.total = response.data.data.total;
           this.listLoading = false;
         })
@@ -295,7 +300,6 @@ export default {
         });
     },
     handleFilter() {
-      this.listQuery.page = 1;
       this.getList();
     },
     handleUpdate(row) {

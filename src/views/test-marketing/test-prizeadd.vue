@@ -477,7 +477,7 @@ export default {
         getgiftname(name){
             this.firstname=name.name
             this.childrenlist=name.children
-            this.categoryId=name.id
+            
         },
         updatecss(index){
             this.num=index
@@ -487,6 +487,7 @@ export default {
         },
         gettwoname(name){
             this.twoname=name.name
+            this.categoryId=name.id
         },
     }
 }

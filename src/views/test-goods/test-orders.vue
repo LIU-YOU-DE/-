@@ -511,7 +511,7 @@ export default {
     },
 
     handCreateTime(time){
-      this.listQuery2.createTime==time
+      this.listQuery2.createTime=time
     },
     handPayStatus(event){
       for(var i=0;i<this.payStaus.length;i++){

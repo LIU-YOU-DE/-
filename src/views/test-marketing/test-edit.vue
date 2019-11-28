@@ -133,10 +133,10 @@
             </transition-group>
           </draggable>
         </el-form-item>
-        <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:-37%;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />指定门店</p>
+        <!-- <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:-37%;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />指定门店</p> -->
       </el-form>
-      <el-button :plain="true" @click="handleAttributeShow" style="margin-bottom:10px;">添加</el-button>
-      <el-table :data="addresslist2" border highlight-current-row>
+      <!-- <el-button :plain="true" @click="handleAttributeShow" style="margin-bottom:10px;">添加</el-button> -->
+      <!-- <el-table :data="addresslist2" border highlight-current-row>
         <el-table-column align="center" label="所在城市" prop="address" />
         <el-table-column align="center" property="logoUrl" label="品牌标志">
           <template slot-scope="scope">
@@ -157,9 +157,9 @@
             <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </el-table> -->
 
-      <el-dialog :visible.sync="attribute" title="添加门店">
+      <!-- <el-dialog :visible.sync="attribute" title="添加门店">
         <el-form
           ref="attributeForm" 
           status-icon
@@ -169,7 +169,7 @@
         >
 
           <el-input
-            v-model="listQuery.name"
+            v-model="listQuery.storeName"
             clearable
             class="filter-item"
             style="width: 200px;"
@@ -200,7 +200,7 @@
           <el-button @click="attribute = false">取消</el-button>
           <el-button @click="handleaddressbuteAdd">确定</el-button>
         </div>
-      </el-dialog>
+      </el-dialog> -->
 
     </div>
       
@@ -306,7 +306,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        name: undefined,
+        storeName: undefined,
         content: undefined,
         sort: 'add_time',
         order: 'desc'
@@ -387,7 +387,7 @@ export default {
         this.addresslist2.unshift(this.choosedata[i])
       }
       this.attribute=false
-      this.listQuery.name=""
+      this.listQuery.storeName=""
       this.choosedata=[]
     },
     seachcar(){
@@ -462,7 +462,10 @@ export default {
         number: this.goods.number,
         photos: this.goods.photos,
         sort: this.goods.sort,
-        status: this.goods.status,
+        status: 1,
+        isHot:1,
+        isPopular:1,
+        isRecommend:1,
         updateTime: this.goods.updateTime,
         wordBegin: this.goods.wordBegin,
         remark:this.goods.remark

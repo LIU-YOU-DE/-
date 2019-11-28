@@ -56,8 +56,8 @@
       <el-table-column align="center" label="标签">
         <template slot-scope="scope">
             <p>
-              <span v-if="scope.row.status==2">下架</span>
-              <span v-if="scope.row.status==1">上架</span>
+              <span v-if="scope.row.status==2">上架</span>
+              <span v-if="scope.row.status==1">下架</span>
               <el-switch
                 v-model="scope.row.status"
                 @change="handchangestatus(scope.row.id,scope.row.status)"
@@ -69,8 +69,8 @@
                 </el-switch>
             </p>
             <p>
-              <span v-if="scope.row.isHot==2">非热销</span>
-              <span v-if="scope.row.isHot==1">热销</span>
+              <span v-if="scope.row.isHot==2">热销</span>
+              <span v-if="scope.row.isHot==1">非热销</span>
               <el-switch
                 v-model="scope.row.isHot"
                 @change="handChangeIsHot(scope.row.id,scope.row.isHot)"
@@ -82,8 +82,8 @@
                 </el-switch>
             </p>
             <p>
-              <span v-if="scope.row.isRecommend==2">非推荐</span>
-              <span v-if="scope.row.isRecommend==1">推荐</span>
+              <span v-if="scope.row.isRecommend==2">推荐</span>
+              <span v-if="scope.row.isRecommend==1">不推荐</span>
               <el-switch
                 v-model="scope.row.isRecommend"
                 @change="handChangeIsRecommed(scope.row.id,scope.row.isRecommend)"
@@ -95,8 +95,8 @@
                 </el-switch>
             </p>
             <p>
-              <span v-if="scope.row.isPopular==2">非人气</span>
-              <span v-if="scope.row.isPopular==1">人气</span>
+              <span v-if="scope.row.isPopular==2">人气</span>
+              <span v-if="scope.row.isPopular==1">非人气</span>
               <el-switch
                 v-model="scope.row.isPopular"
                 @change="handChangeIsPopular(scope.row.id,scope.row.isPopular)"
@@ -108,8 +108,8 @@
                 </el-switch>
             </p>
             <p>
-              <span v-if="scope.row.isSpecial==2">非特卖</span>
-              <span v-if="scope.row.isSpecial==1">特卖</span>
+              <span v-if="scope.row.isSpecial==2">特卖</span>
+              <span v-if="scope.row.isSpecial==1">非特卖</span>
               <el-switch
                 v-model="scope.row.isSpecial"
                 @change="handChangeIsSpecial(scope.row.id,scope.row.isSpecial)"
@@ -224,10 +224,8 @@ export default {
       list: [],
       total: 0,
       showCarImgUrl:[],
-      value1:1,
-      value2:2,
-      value3:1,
-      value4:2,
+      value1:2,
+      value2:1,
       listLoading: true,
       listQuery: {
         page: 1,
@@ -367,7 +365,7 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(()=>{
-          deleteGoods(row)
+          deleteGoods(row.id)
         .then(response => {
           this.$notify.success({
             title: "成功",

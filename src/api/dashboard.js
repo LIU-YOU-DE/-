@@ -20,3 +20,34 @@ export function getOrderPoint(){
     method:'get'
   })
 }
+
+export function getOrderPrize(){
+  return request({
+    url:'/dashboard/orderPrize',
+    method:'get'
+  })
+}
+
+export function getPointCustom(query){
+  return request({
+    url:'/dashboard/point/custom',
+    method:'get',
+    params: query
+  })
+}
+
+export function getOrderCustom(query){
+  return request({
+    url:'/dashboard/order/custom',
+    method:'get',
+    params:query
+  })
+}
+
+export function getorderPrizeCustom(query){
+  return request({
+    url:'/dashboard/orderPrize/custom',
+    method:'get',
+    params:query
+  })
+}

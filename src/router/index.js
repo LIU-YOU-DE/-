@@ -78,7 +78,8 @@ export default new Router({
 })
 
 export const asyncRouterMap = [
-  // --------------------------------————————————————————————————
+
+  // ---------------------重写样本-----------————————————————————————————
   {
     path: '/test',
     component: Layout,
@@ -95,7 +96,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test/user'),
         name: 'user',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /members',],
           title: '用户信息',
           noCache: true
         }
@@ -116,7 +117,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test/useredit'),
         name: 'useredit',
         meta: {
-          perms: ['GET /members', 'GET /members/{memberId}'],
+          perms: ['GET /members', 'PUT /members/{memberId}'],
           title: '编辑资料',
           noCache: true
         },
@@ -127,7 +128,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test/userip'),
         name: 'userip',
         meta: {
-          perms: ['GET /members', 'GET /members/{memberId}'],
+          perms: ['GET /loginRecords'],
           title: '登录日志',
           noCache: true
         },
@@ -151,7 +152,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-goods/test-orderlook1'),
         name: 'test-orderlook1',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /orders/{id}'],
           title: '订单编辑',
           noCache: true
         },
@@ -162,7 +163,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-goods/test-orderlook2'),
         name: 'test-orderlook2',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /orders/{id}'],
           title: '订单编辑',
           noCache: true
         },
@@ -173,7 +174,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-goods/test-orderlook2-2'),
         name: 'test-orderlook2-2',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /orders/{id}'],
           title: '订单编辑',
           noCache: true
         },
@@ -184,7 +185,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-goods/test-orderlook3'),
         name: 'test-orderlook3',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /orders/{id}'],
           title: '订单编辑',
           noCache: true
         },
@@ -195,7 +196,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-goods/test-orderlook4'),
         name: 'test-orderlook4',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /orders/{id}'],
           title: '订单编辑',
           noCache: true
         },
@@ -206,7 +207,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-goods/test-orders'),
         name: 'test-orders',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /orders'],
           title: '订单管理',
           noCache: true
         }
@@ -261,7 +262,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-giftfenlei'),
         name: 'test-giftfenlei',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /giftCategorys'],
           title: '礼品分类设置',
           noCache: true
         }
@@ -271,7 +272,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-prize'),
         name: 'test-prize',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /gifts'],
           title: '礼品信息导入',
           noCache: true
         }
@@ -281,7 +282,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-brand'),
         name: 'test-brand',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /brands',],
           title: '汽车品牌管理',
           noCache: true
         }
@@ -291,7 +292,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-merchant'),
         name: 'test-merchant',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /merchants'],
           title: '汽车门店信息',
           noCache: true
         }
@@ -301,7 +302,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-merchantEdit'),
         name: 'test-merchantEdit',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /merchants', "PUT /merchant/{id}", "GET /regions/short"],
           title: '汽车门店编辑',
           noCache: true
         },
@@ -312,7 +313,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-merchantAdd'),
         name: 'test-merchantAdd',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /merchants','POST /merchant'],
           title: '添加汽车门店',
           noCache: true
         },
@@ -323,7 +324,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-list'),
         name: 'test-list',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /cars',],
           title: '车辆信息管理',
           noCache: true
         }
@@ -333,7 +334,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-create'),
         name: 'test-create',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['POST /car'],
           title: '新增车辆',
           noCache: true
         },
@@ -344,7 +345,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-edit'),
         name: 'test-edit',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /cars','PUT /car/{id}'],
           title: '编辑车辆信息',
           noCache: true
         },
@@ -355,7 +356,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-activity'),
         name: 'test-activity',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /activity'],
           title: '活动管理',
           noCache: true
         }
@@ -365,7 +366,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-activityadd'),
         name: 'test-activityadd',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /activity'],
           title: '添加活动',
           noCache: true
         },
@@ -376,7 +377,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-activityedit'),
         name: 'test-activityedit',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /activity','PUT /activity/{id}'],
           title: '编辑活动',
           noCache: true
         },
@@ -387,7 +388,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-showactivity'),
         name: 'test-showactivity',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /activity','GET /activity/{id}'],
           title: '活动详情',
           noCache: true
         },
@@ -398,7 +399,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-youhuiquan'),
         name: 'test-youhuiquan',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /coupons',],
           title: '优惠券管理',
           noCache: true
         }
@@ -408,7 +409,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-youhuiquanadd'),
         name: 'test-youhuiquanadd',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /coupon'],
           title: '添加优惠券',
           noCache: true
         },
@@ -419,7 +420,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-youhuiquanedit'),
         name: 'test-youhuiquanedit',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /coupons','PUT /coupon/{id}'],
           title: '编辑优惠券',
           noCache: true
         },
@@ -430,7 +431,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-gift'),
         name: 'test-gift',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /prize',],
           title: '奖品管理',
           noCache: true
         },
@@ -440,7 +441,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-prizeroc'),
         name: 'test-prizeroc',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /prizeRecord',],
           title: '用户中奖记录',
           noCache: true
         },
@@ -450,7 +451,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-issue'),
         name: 'test-issue',
         meta: {
-          perms: ['GET /admin',],
+          perms: ['GET /comment',],
           title: '问答设置',
           noCache: true
         },
@@ -460,7 +461,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/test-prizeadd'),
         name: 'test-prizeadd',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /gifts','POST /gift'],
           title: '添加礼品',
           noCache: true
         },
@@ -471,7 +472,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-marketing/prizeedit'),
         name: 'test-prizeedit',
         meta: {
-          perms: ['GET /banners'],
+          perms: ['GET /gifts','PUT /gift/{id}'],
           title: '编辑礼品',
           noCache: true
         },
@@ -505,7 +506,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-admin/test-rols'),
         name: 'test-rols',
         meta: {
-          perms: ['GET /storage/list'],
+          perms: ['GET /roles'],
           title: '角色管理',
           noCache: true
         }
@@ -538,7 +539,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-sys/test-rules'),
         name: 'test-rules',
         meta: {
-          perms: ['GET /storage/list'],
+          perms: ['GET /rules'],
           title: '基本设置',
           noCache: true
         }
@@ -548,7 +549,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-sys/test-cartype'),
         name: 'test-cartype',
         meta: {
-          perms: ['GET /storage/list'],
+          perms: ['GET /commonParam/{type}','POST /commonParam','DELETE /commonParam/{type}','PUT /commonParam/{type}'],
           title: '车型设置',
           noCache: true
         }
@@ -558,7 +559,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-sys/test-notices'),
         name: 'test-notices',
         meta: {
-          perms: ['GET /storage/list'],
+          perms: ['GET /rules'],
           title: '消息通知',
           noCache: true
         }
@@ -568,7 +569,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-sys/test-region'),
         name: 'test-region',
         meta: {
-          perms: ['GET /storage/list'],
+          perms: ['GET /regions'],
           title: '区域设置',
           noCache: true
         }
@@ -578,7 +579,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/test-sys/test-rulesedit'),
         name: 'test-rulesedit',
         meta: {
-          perms: ['GET /storage/list'],
+          perms: ['GET /rules','PUT /rule/{id}','GET /rule/{id}'],
           title: '编辑规则',
           noCache: true
         },
@@ -619,8 +620,8 @@ export const asyncRouterMap = [
 
   { path: '*', redirect: '/404', hidden: true },
 
-  
-  
+
+
 ]
 
 

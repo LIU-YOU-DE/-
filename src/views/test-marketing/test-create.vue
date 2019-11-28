@@ -34,8 +34,8 @@
 
         <el-form-item label="特卖车" prop="isSpecial">
           <el-radio-group v-model="goods.isSpecial">
-            <el-radio :label="1">是</el-radio>
-            <el-radio :label="2">否</el-radio>
+            <el-radio :label="1">否</el-radio>
+            <el-radio :label="2">是</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -125,9 +125,9 @@
             </transition-group>
           </draggable>
         </el-form-item>
-        <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:-37%;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />指定门店</p>
+        <!-- <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:-37%;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />指定门店</p> -->
       </el-form>
-      <el-button :plain="true" @click="handleAttributeShow" style="margin-bottom:10px;">添加</el-button>
+      <!-- <el-button :plain="true" @click="handleAttributeShow" style="margin-bottom:10px;">添加</el-button>
       <el-table :data="addresslist2" border highlight-current-row>
         <el-table-column align="center" label="所在城市" prop="address" />
         <el-table-column align="center" property="logoUrl" label="品牌标志">
@@ -149,10 +149,10 @@
             <el-button type="danger" size="mini" @click="handleDelete(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
-      </el-table>
+      </el-table> -->
 
       <!-- 查找门店 -->
-      <el-dialog :visible.sync="attributeVisiable" title="添加门店">
+      <!-- <el-dialog :visible.sync="attributeVisiable" title="添加门店">
         <el-form
           ref="attributeForm" 
           status-icon
@@ -174,7 +174,7 @@
             <el-table-column type="selection" width="55" @selection-change="changeFun"/>
             <el-table-column align="center" label="所在城市" prop="address" width="100"/>
 
-            <el-table-column align="center" property="logoUrl" label="品牌标志">
+            <el-table-column align="center" prop="logoUrl" label="品牌标志">
               <template slot-scope="scope">
                 <img :src="scope.row.logoUrl" width="40" >
               </template>
@@ -193,7 +193,7 @@
           <el-button @click="attributeVisiable = false">取消</el-button>
           <el-button @click="handleaddressbuteAdd">确定</el-button>
         </div>
-      </el-dialog>
+      </el-dialog> -->
 
       
 
@@ -331,7 +331,7 @@ export default {
         detailTitle: '',
         detailHtml: '',
         endTime: '',
-        isSpecial: '',
+        isSpecial: 1,
         name: '',
         number: '',
         photos: '',
@@ -464,11 +464,14 @@ export default {
         detailHtml: this.goods.detailHtml,
         endTime: this.goods.endTime,
         isSpecial: this.goods.isSpecial,
+        isHot:1,
+        isPopular:1,
+        isRecommend:1,
         name: this.goods.name,
         number: this.goods.number,
         photos: this.goods.photos,
         sort: this.goods.sort,
-        status: this.goods.status,
+        status: 1,
         updateTime: this.goods.updateTime,
         wordBegin: this.goods.wordBegin,
         remark: this.goods.remark,
