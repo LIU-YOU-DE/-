@@ -78,6 +78,7 @@ export default {
   data() {
     return {
       dialogVisible:false,
+      memberType:undefined,
       list: {
         upid:null,
         addTime: "",
@@ -157,10 +158,12 @@ export default {
       })
     },
     getlist() {
+      this.memberType=this.$route.query.memberType
       const goodsId = this.$route.query.id;
       this.upid =goodsId
       getlook(goodsId).then(response => {
         this.list = response.data.data;
+        console.log(this.list)
         this.addresslist=response.data.data.addressList
       });
     },
@@ -168,7 +171,7 @@ export default {
       this.$router.push({ path: "/test/user" });
     },
     handleEdit: function() {
-      this.$router.push({path:"/test/useredit",query: { list: this.list }})
+      this.$router.push({path:"/test/useredit",query: { list: this.list, memberType:this.memberType}})
     }
   },
   created() {

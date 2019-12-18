@@ -130,7 +130,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData">确定</el-button>
+        <el-button v-if="dialogStatus=='create'" @click="createData">确定</el-button>
         <el-button v-else @click="updateData">确定</el-button>
       </div>
     </el-dialog>
@@ -406,18 +406,6 @@ export default {
               })
             })
         })
-      // deleteBrand(row)
-      //   .then(response => {
-      //     const index = this.list.indexOf(row)
-      //     this.list.splice(index, 1)
-      //   })
-      //   .catch(response => {
-      //     this.$notify.error({
-      //       title: '失败',
-      //       message: response.data.errmsg,
-      //       duration: 0
-      //     })
-      //   })
     },
     handleDownload() {
       this.downloadLoading = true

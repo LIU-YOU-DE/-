@@ -78,6 +78,17 @@
           </el-radio-group>
         </el-form-item>
 
+        <el-form-item label="账户类型" prop="memberType">
+          <!-- <el-radio-group v-model="memberType">
+            <el-radio :label="1">普通用户</el-radio>
+            <el-radio :label="2">汽车商家</el-radio>
+            <el-radio :label="3">保养商家</el-radio>
+          </el-radio-group> -->
+            <el-radio :label="1"  v-model="memberType">普通用户</el-radio>
+            <el-radio :label="2"  v-model="memberType">汽车商家</el-radio>
+            <el-radio :label="3"  v-model="memberType" @change="dialogVisible=true">保养商家</el-radio>
+        </el-form-item>
+
         <el-form-item label="邀请人id" prop="sourceMemberId">
           <el-col :span="12">
             <el-input v-model="list.sourceMemberId" disabled></el-input>
@@ -103,16 +114,37 @@
 
       </el-form>
       </div>
-      
+      <el-dialog
+        title="添加商家关联"
+        :visible.sync="dialogVisible"
+        width="30%">
+        <el-select v-model="merchantname" placeholder="请选择" @change="handMerchantId">
+          <el-option
+            v-for="item in merChantList"
+            :key="item.merchantId"
+            :label="item.merchantName"
+            :value="item.merchantName">
+          </el-option>
+        </el-select>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button @click="handMerchantList">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import { getlook,updateAd } from "@/api/user";
+import { getlook,updateAd,merchantList ,handMerchant} from "@/api/user";
 export default {
   data() {
     return {
+      merchantId:undefined,
+      merchantname:'',
+      merChantList:[],
+      dialogVisible:false,
+      memberType:undefined,
       id:"",
       list: {
         upid:null,
@@ -141,6 +173,31 @@ export default {
     };
   },
   methods: {
+    handMerchantId(event){
+      for(let i=0;i<this.merChantList.length;i++){
+        if(event==this.merChantList[i].merchantName){
+          this.merchantId=this.merChantList[i].merchantId
+        }
+      }
+    },
+    getMerchantList(){
+      merchantList().then(response=>{
+        this.merChantList=response.data.data
+      })
+    },
+    handMerchantList(){
+      const merchant={
+        merchantId:this.merchantId,
+        memberId:this.list.memberId
+      }
+      handMerchant(merchant).then(response=>{
+        this.dialogVisible=false
+        this.$notify.success({
+          title:"成功",
+          message:"添加成功"
+        })
+      })
+    },
     gouserip(){
       this.$router.push({path:"/test/userip",query:{id:this.id}})
     },
@@ -152,6 +209,7 @@ export default {
       this.upid =goodsId
       this.list = this.$route.query.list;
       this.id=this.list.memberId
+      this.memberType=this.$route.query.memberType
       // getlook(goodsId).then(response => {
       //   this.list = this.$route.query.list;
       //   // console.log(response);
@@ -183,6 +241,7 @@ export default {
     }
   },
   created() {
+    this.getMerchantList()
     this.getlist();
   }
 };

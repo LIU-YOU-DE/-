@@ -9,6 +9,15 @@
         </div>
         </div>
       </div>
+      <span class="search">用户姓名：</span>
+           <el-input
+            v-model.trim="listQuery.memberName"
+            clearable
+            class="filter-item"
+            style="width: 200px;"
+            placeholder="请输入用户姓名"
+            v-on:keyup.enter.native="seachprize"
+          />
       <span class="search">奖品名称：</span>
       <el-input
             v-model.trim="listQuery.prizeName"
@@ -18,40 +27,14 @@
             placeholder="请输入奖品名称"
             v-on:keyup.enter.native="seachprize"
           />
-          <span class="search">活动ID：</span>
-           <el-input
-            v-model.trim="listQuery.activityId"
-            clearable
-            class="filter-item"
-            style="width: 200px;"
-            placeholder="请输入活动ID"
-            v-on:keyup.enter.native="seachprize"
-          />
-          <span class="search">用户姓名：</span>
-           <el-input
-            v-model.trim="listQuery.memberName"
-            clearable
-            class="filter-item"
-            style="width: 200px;"
-            placeholder="请输入用户姓名"
-            v-on:keyup.enter.native="seachprize"
-          />
-          <span class="search">用户ID：</span>
-           <el-input
-            v-model.trim="listQuery.memberId"
-            clearable
-            class="filter-item"
-            style="width: 200px;"
-            placeholder="请输入用户ID"
-            v-on:keyup.enter.native="seachprize"
-          />
-          <span class="search">电话号码：</span>
+          
+          <span class="search">手机号码：</span>
           <el-input
             v-model.trim="listQuery.phoneNumber"
             clearable
             class="filter-item"
             style="width: 200px;"
-            placeholder="请输入电话号码"
+            placeholder="请输入手机号码"
             v-on:keyup.enter.native="seachprize"
           />
       </div>
@@ -66,11 +49,10 @@
                 fit
                 highlight-current-row
                 >
-                <el-table-column align="center" label="活动id" prop="activityId"></el-table-column>
                 <el-table-column align="center" label="用户id" prop="memberId"></el-table-column> 
-                <el-table-column align="center" label="用户名字" prop="memberName"></el-table-column> 
-                <el-table-column align="center" label="电话号码" prop="phoneNumber"></el-table-column> 
-                <el-table-column align="center" label="奖品名字" prop="prizeName"></el-table-column> 
+                <el-table-column align="center" label="用户姓名" prop="memberName"></el-table-column> 
+                <el-table-column align="center" label="手机号码" prop="phoneNumber"></el-table-column> 
+                <el-table-column align="center" label="奖品名称" prop="prizeName"></el-table-column> 
                 <el-table-column align="center" label="奖品图片" prop="prizeImgUrl">
                     <template  slot-scope="scope">
                         <img :src="scope.row.prizeImgUrl" v-if="scope.row.prizeImgUrl" style="width:50px;">

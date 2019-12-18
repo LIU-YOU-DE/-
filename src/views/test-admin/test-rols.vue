@@ -292,7 +292,12 @@ export default {
       })
     },
     handleDelete(id) {
-      this.handleDelete=true
+      this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(()=>{
+        this.handleDelete=true
       deleteRole(id)
         .then(response => {
           this.getList()
@@ -310,6 +315,7 @@ export default {
             duration: 0
           })
         })
+      })
     },
     handlePermission(row) {
       this.permissionbox = true

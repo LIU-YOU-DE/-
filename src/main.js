@@ -33,7 +33,6 @@ Vue.use(Element, {
 
 Vue.directive('permission', permission)
 
-// register global utility filters.
 Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })

@@ -364,7 +364,6 @@ export default {
   },
   methods: {
     handleDelete(id){
-      console.log()
       Array.prototype.del = function(filter) {
         var index = filter
         if (typeof filter === 'function') {

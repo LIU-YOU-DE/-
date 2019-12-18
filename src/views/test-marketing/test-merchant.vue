@@ -567,13 +567,18 @@ export default {
         })
     },
     handleDelete(row) {
-      deleteAd(row)
-        .then(response => {
-          this.getList()
-          this.$notify.success({
-            title: '成功',
-            message: '删除成功'
-          })
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteAd(row)
+            .then(response => {
+              this.getList()
+              this.$notify.success({
+                title: '成功',
+                message: '删除成功'
+              })
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
         })
@@ -584,6 +589,12 @@ export default {
             duration: 0
           })
         })
+      }).catch(()=>{
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });   
+      })
     },
     handleDownload() {
       this.downloadLoading = true

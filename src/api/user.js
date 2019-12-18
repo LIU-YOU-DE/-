@@ -61,3 +61,17 @@ export function listHistory(query) {
   })
 }
 
+export function merchantList(){
+  return request({
+    url:`/upkeepMerChant/chantList`,
+    method:'get'
+  })
+}
+
+export function handMerchant(data){
+  return request({
+    url:`/intersMembers`,
+    method:'post',
+    data
+  })
+}

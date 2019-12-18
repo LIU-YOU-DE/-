@@ -344,7 +344,6 @@ export default {
         .then(response => {
           this.total = response.data.data.total;
           this.list = response.data.data.list
-          console.log(this.list)
           this.listLoading = false
         })
         .catch(() => {
@@ -353,7 +352,6 @@ export default {
         })
 
       listCatL1().then(response => {
-        //  console.log(response);
         this.options = response.data.data
       })
     },
@@ -384,7 +382,6 @@ export default {
       })
     },
     createData() {
-      // console.log(this.dataForm);
 
       createCategory(this.dataForm)
         .then(response => {
@@ -440,7 +437,12 @@ export default {
       })
     },
     handleDelete(row) {
-      deleteCategory(row.id)
+      this.$confirm('此操作将删除该通知, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(()=>{
+        deleteCategory(row.id)
         .then(response => {
           this.getList()
           this.$notify.success({
@@ -455,6 +457,7 @@ export default {
             duration: 0
           })
         })
+      })
     }
   }
 }

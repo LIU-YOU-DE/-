@@ -53,7 +53,6 @@ export default {
       this.listLoading = true
       listRegion().then(response => {
         this.list = response.data.data.list
-        console.log(response)
         this.listLoading = false
       }).catch(() => {
         this.list = []

@@ -296,7 +296,6 @@ export default {
   },
   mounted(){
     listCatAndBrand().then(response => {
-        // console.log(response.data.data.list);
 
         this.categoryList = response.data.data.list
         // this.brandList = response.data.data.brandList;
@@ -402,7 +401,6 @@ export default {
     },
     seachcar() {
       readAd(this.attributeForm.name).then(response => {
-        // console.log(response);
         this.carlist = response.data.data.list
         // debugger;
       })
@@ -454,8 +452,6 @@ export default {
     },
 
     handleCategoryChange(value) {
-      //  console.log(value);
-
       this.goods.regionId = value
     },
   }

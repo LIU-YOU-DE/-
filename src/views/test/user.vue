@@ -60,7 +60,13 @@
       border
     >
       <el-table-column align="center" label="会员id" prop="memberId"/>
-
+      <el-table-column align="center" label="会员类型" prop="memberType">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.memberType==1">普通用户</el-tag>
+          <el-tag v-if="scope.row.memberType==2">汽车商家</el-tag>
+          <el-tag v-if="scope.row.memberType==3">保养商家</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column align="center" label="昵称" prop="nickname" />
  
       <el-table-column align="center" label="性别" prop="gender" width="150">
@@ -148,7 +154,7 @@
                     type="daterange"
                     align="right"
                     style="width:410px;"
-                    value-format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd HH:mm:ss"
                     unlink-panels
                     @change=handRegday
                     range-separator="至"
@@ -213,8 +219,8 @@ export default {
         page: 1,
         limit: 20,
         memberId:undefined,
-        addTimeBegin:"",
-        addTimeEnd:"",
+        addTimeBegin:undefined,
+        addTimeEnd:undefined,
         nickname:undefined,
         nickname:undefined,
         mobile:undefined,
@@ -247,7 +253,6 @@ export default {
     handRegday(time){
       this.searchForm.addTimeBegin=time[0]
       this.searchForm.addTimeEnd=time[1]
-      console.log(typeof(this.searchForm.addTimeBegin)=='string')
     },
     handUserStatus(event){
       for(var i=0;i<this.userStaus.length;i++){
@@ -278,8 +283,9 @@ export default {
         this.searchForm.memberId=undefined
         this.searchForm.nickname=undefined
         this.searchForm.mobile=undefined
-        this.searchForm.addTimeBegin=''
-        this.searchForm.addTimeEnd=''
+        this.searchForm.addTimeBegin=undefined
+        this.searchForm.addTimeEnd=undefined
+        this.time=undefined
         this.status=undefined
         this.dialogVisible=false
         this.popcontainer=false
@@ -303,7 +309,7 @@ export default {
       this.getList();
     },
     handleUpdate(row) {
-      this.$router.push({ path: "/test/userlook", query: { id: row.memberId } });
+      this.$router.push({ path: "/test/userlook", query: { id: row.memberId,memberType:row.memberType } });
     },
     handleDownload() {
       this.downloadLoading = true;

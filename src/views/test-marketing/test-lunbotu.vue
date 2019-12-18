@@ -20,13 +20,15 @@
         placeholder="请输入轮播图标题"
       />
       <span class="search">轮播图所在页面：</span>
-      <el-input
-        v-model.trim="listQuery.title"
-        clearable
-        class="filter-item"
-        style="width: 200px;"
-        placeholder="轮播图所在页面"
-      />
+      <el-select v-model="listQuery.type" clearable placeholder="请选择" @change=handchange>
+        <el-option
+          v-for="item in type"
+          :key="item.value"
+          :label="item.value" 
+          :value="item.id"
+        >
+        </el-option>
+    </el-select>
     </div>
 
     <!-- 查询结果 -->
@@ -207,8 +209,10 @@
         </el-form-item>
 
         <el-form-item label="是否显示" prop="status">
-           <el-radio v-model="radio" label="1">是</el-radio>
-          <el-radio v-model="radio" label="2">否</el-radio>
+           <el-radio-group v-model="dataForm.status">
+            <el-radio :label="1">不显示</el-radio>
+            <el-radio :label="2">显示</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer" style="display:flex;justify-content:flex-end;margin-right:20px;margin-bottom:20px">
@@ -340,15 +344,6 @@
         <el-form-item label="轮播图标题" prop="title">
           <el-input v-model="dataForm.title" />
         </el-form-item>
-        <!-- <el-form-item label="轮播图排序" prop="sort">
-          <el-input v-model="dataForm.sort" />
-
-           content="数值越小越靠前"
-
-          <el-tooltip class="item" effect="dark" content="数值越小越靠前" placement="top-start">
-            <svg-icon icon-class="question-mark" class="icon-question"></svg-icon>
-          </el-tooltip>
-        </el-form-item>  -->
 
         <el-form-item label="缩略图" prop="coverUrl">
           <el-upload
@@ -563,6 +558,7 @@ export default {
   },
   data() {
     return {
+      value:'',
       radio:"2",
       updatebox:false,
       updata: {},
@@ -580,6 +576,16 @@ export default {
         sort: "add_time",
         order: "desc"
       },
+      type:[
+        {
+          id:'1',
+          value:'汽车页面'
+        },
+        {
+          id:'2',
+          value:'礼品页面'
+        }
+      ],
       dataForm: {
         id: "",
         title: "",
@@ -587,6 +593,7 @@ export default {
         targetType: "",
         coverUrl: "",
         sort: "",
+        status:'1',
         targetId: "",
         type: ""
       },
@@ -639,6 +646,13 @@ export default {
     this.getList();
   },
   methods: {
+    handchange(event){
+      for(let i in this.type){
+        if(event==this.type[i].value){
+          this.listQuery.type=this.type[i].id
+        }
+      }
+    },
     getList() {
       this.listLoading = true;
       listAd(this.listQuery)
@@ -665,6 +679,7 @@ export default {
         targetType: "",
         coverUrl: "",
         sort: "",
+        status:'',
         targetId: "",
         type: ""
       };
@@ -685,6 +700,7 @@ export default {
           createAd(this.dataForm)
             .then(response => {
               this.list.unshift(response.data.data);
+              this.$router.go(0)
               this.getList();
               this.createbox = false;
               this.$notify.success({
@@ -704,8 +720,6 @@ export default {
     },
 
     handleUpdate(row) {
-      // console.log(row);
-      console.log(this.dataForm.targetType)
       this.dataForm = Object.assign({}, row);
       this.updatebox = true;
       this.$nextTick(() => {
@@ -771,7 +785,12 @@ export default {
         });
     },
     handleDelete(row) {
-      deleteAd(row)
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(()=>{
+        deleteAd(row)
         .then(response => {
           this.getList();
           this.$notify.success({
@@ -788,6 +807,7 @@ export default {
             duration: 0
           });
         });
+      })
     },
     handleDownload() {
       this.downloadLoading = true;

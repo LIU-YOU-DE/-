@@ -156,14 +156,14 @@ export default {
     methods:{
       // 查看
       showActiviti(row){
-         this.dialogVisible=true
-         this.dataForm.id=row.id
-         this.dataForm.activityName=row.activityName
-         this.dataForm.type=row.type
-         this.dataForm.description=row.description
-         this.dataForm.prizeList=row.prizeList
-         this.dataForm.payStatus=row.status
-        this.$router.push({path:"/test-marketing/test-showactivity",query:{row:row}})
+          this.dialogVisible=true
+          this.dataForm.id=row.id
+          this.dataForm.activityName=row.activityName
+          this.dataForm.type=row.type
+          this.dataForm.description=row.description
+          this.dataForm.prizeList=row.prizeList
+          this.dataForm.payStatus=row.status
+          this.$router.push({path:"/test-marketing/test-showactivity",query:{row:row}})
         },
       // 查找
       seachprize(){
@@ -207,6 +207,11 @@ export default {
       }
         },
         handDeleteActivity(row){
+          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(()=>{
             deleteactivity(row.id).then(response=>{
                 this.$notify.success({
                     title:"成功",
@@ -220,6 +225,12 @@ export default {
                     duration: 0
                 })
             })
+          }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
         },
         getlist(){
             activitylist(this.listQuery).then(response=>{

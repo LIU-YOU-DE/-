@@ -203,6 +203,17 @@ export const asyncRouterMap = [
         hidden:true
       },
       {
+        path: 'test-orderlook5',
+        component: () => import('@/views/test-goods/test-orderlook5'),
+        name: 'test-orderlook5',
+        meta: {
+          perms: ['GET /orders/{id}'],
+          title: '订单编辑',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
         path: 'test-orders',
         component: () => import('@/views/test-goods/test-orders'),
         name: 'test-orders',
@@ -247,6 +258,154 @@ export const asyncRouterMap = [
       icon: 'chart'
     },
     children: [
+      // {
+      //   path: 'test-luckDrawPrize',
+      //   component: () => import('@/views/test-marketing/test-luckDrawPrize'),
+      //   name: 'test-luckDrawPrize',
+      //   meta: {
+      //     perms: ['GET /banners'],
+      //     title: '抽奖活动设置',
+      //     noCache: true
+      //   }
+      // },
+      // {
+      //   path: 'test-luckDrawAdd',
+      //   component: () => import('@/views/test-marketing/test-luckDrawAdd'),
+      //   name: 'test-luckDrawAdd',
+      //   meta: {
+      //     perms: ['GET /banners'],
+      //     title: '添加抽奖活动',
+      //     noCache: true
+      //   },
+      //   hidden:true
+      // },
+      // {
+      //   path: 'test-showLuckDraw',
+      //   component: () => import('@/views/test-marketing/test-showLuckDraw'),
+      //   name: 'test-showLuckDraw',
+      //   meta: {
+      //     perms: ['GET /banners'],
+      //     title: '查看抽奖活动',
+      //     noCache: true
+      //   },
+      //   hidden:true
+      // },
+      // {
+      //   path: 'test-luckDrawEdit',
+      //   component: () => import('@/views/test-marketing/test-luckDrawEdit'),
+      //   name: 'test-luckDrawEdit',
+      //   meta: {
+      //     perms: ['GET /banners'],
+      //     title: '编辑抽奖活动',
+      //     noCache: true
+      //   },
+      //   hidden:true
+      // },
+      // {
+      //   path: 'test-luckDrawRoc',
+      //   component: () => import('@/views/test-marketing/test-luckDrawRoc'),
+      //   name: 'test-luckDrawRoc',
+      //   meta: {
+      //     perms: ['GET /banners'],
+      //     title: '抽奖活动中奖记录',
+      //     noCache: true
+      //   },
+      // },
+      // {
+      //   path: 'test-marketingActivity',
+      //   component: () => import('@/views/test-marketing/test-marketingActivity'),
+      //   name: 'test-marketingActivity',
+      //   meta: {
+      //     perms: ['GET /banners'],
+      //     title: '营销活动设置',
+      //     noCache: true
+      //   }
+      // },
+      {
+        path:'test-maintenanceAdd',
+        component: () => import('@/views/test-marketing/test-maintenanceAdd'),
+        name:'test-maintenanceAdd',
+        meta: {
+          perms: ['GET /banners'],
+          title: '养车分类专区',
+          noCache: true
+        }
+      },
+      {
+        path:'test-maintenanceContent',
+        component: () => import('@/views/test-marketing/test-maintenanceContent'),
+        name:'test-maintenanceContent',
+        meta: {
+          perms: ['GET /banners'],
+          title: '养车产品模块',
+          noCache: true
+        }
+      },
+      {
+        path:'test-maintenanceEdit',
+        component: () => import('@/views/test-marketing/test-maintenanceEdit'),
+        name:'test-maintenanceEdit',
+        meta: {
+          perms: ['GET /banners'],
+          title: '产品信息',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path:'test-produAndMerchant',
+        component: () => import('@/views/test-marketing/test-produAndMerchant'),
+        name:'test-produAndMerchant',
+        meta: {
+          perms: ['GET /banners'],
+          title: '编辑关联信息',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path:'test-productEdit',
+        component: () => import('@/views/test-marketing/test-productEdit'),
+        name:'test-productEdit',
+        meta: {
+          perms: ['GET /banners'],
+          title: '编辑产品信息',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path:'test-upkeepMerChantAddress',
+        component: () => import('@/views/test-marketing/test-upkeepMerChantAddress'),
+        name:'test-upkeepMerChantAddress',
+        meta: {
+          perms: ['GET /banners'],
+          title: '添加养车商家',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path:'test-upkeepMerChantAddressEdit',
+        component: () => import('@/views/test-marketing/test-upkeepMerChantAddressEdit'),
+        name:'test-upkeepMerChantAddressEdit',
+        meta: {
+          perms: ['GET /banners'],
+          title: '编辑养车商家',
+          noCache: true
+        },
+        hidden:true
+      },
+      {
+        path:'test-merChartList',
+        component: () => import('@/views/test-marketing/test-merChartList'),
+        name:'test-merChartList',
+        meta: {
+          perms: ['GET /banners'],
+          title: '养车商家列表',
+          noCache: true
+        }
+      },
       {
         path: 'test-lunbotu',
         component: () => import('@/views/test-marketing/test-lunbotu'),

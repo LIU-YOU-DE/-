@@ -403,7 +403,6 @@ export default {
 
   methods: {
     handleDelete(id){
-      console.log()
       Array.prototype.del = function(filter) {
         var index = filter
         if (typeof filter === 'function') {
@@ -432,7 +431,6 @@ export default {
     seachcar(){
       listAd(this.listQuery).then(response=>{
         this.addresslist=response.data.data.list
-        console.log(this.addresslist)
       })
     },
     init: function() {

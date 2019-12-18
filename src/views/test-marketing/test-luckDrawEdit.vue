@@ -1,9 +1,9 @@
 <template>
   <div style="width:90%;margin:0 auto;">
     <div class="tabletop">
-      <p class="address">活动编辑</p>
+      <p class="address">抽奖活动编辑</p>
     </div>
-    <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:50px;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />活动介绍</p>
+    <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:50px;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />抽奖活动介绍</p>
     <div style="width:70%;margin:0 auto;">
       <el-form
         ref="goods"
@@ -11,21 +11,23 @@
         label-width="150px"
       >
         <el-form-item
-          label="活动Id"
-          prop="id"
-          class="inputstyle"
-        >
-          <el-input v-model="goods.id" />
-        </el-form-item>
-        <el-form-item
-          label="活动名称"
+          label="抽奖活动名称"
           prop="activityName"
           class="inputstyle"
         >
           <el-input v-model="goods.activityName" />
         </el-form-item>
         <el-form-item
-          label="活动描述"
+          label="抽奖活动类型"
+          prop="type"
+        >
+          <el-radio
+            v-model="goods.type"
+            :label="goods.type"
+          >水果机抽奖</el-radio>
+        </el-form-item>
+        <el-form-item
+          label="抽奖活动描述"
           prop="description"
         >
           <template slot-scope="scope">
@@ -53,15 +55,6 @@
 
         </el-form-item>
         <el-form-item
-          label="活动类型"
-          prop="type"
-        >
-          <el-radio
-            v-model="goods.type"
-            :label="goods.type"
-          >水果机抽奖</el-radio>
-        </el-form-item>
-        <el-form-item
           label="备注"
           prop="remark"
           class="inputstyle"
@@ -76,21 +69,20 @@
 
     </div>
       
-      <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:50px;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />指定奖品</p>
+      <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:50px;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />抽奖活动奖品设置</p>
       <div style="width:90%;margin:0 auto;">
         <p style="font-size:14px;color:#666;">所有奖品中奖概率的和为100,如果输入小数将向下取整。</p>
       <el-button
         :plain="true"
         @click="attributeVisiable=true"
         style="margin-right:20px;margin-bottom:10px;"
-      >添加</el-button>
+      >添加活动奖品</el-button>
       <span style="color:#666;font-size:16px;display:inline-block;margin-right:20px;">总点数：100</span> 
       <span style="font-size:16px;">已分配点数：{{sum}}</span>
       <span style="font-size:16px;color:red;display:inline-block;margin-left:20px;">剩余可分配点数：{{100-sum}}</span>
       </div>
       
       <el-table border :data="prizeList" style="width:90%;margin:0 auto;">
-        <el-table-column align="center" label="奖品ID" prop="prizeId" width="100"/>
         <el-table-column align="center" label="奖品名称" prop="prizeName" width="200"/>
         <el-table-column align="center" label="奖品描述" prop="description" type="textarea" width="300"/>
         <el-table-column align="center" prop="imgUrl" label="奖品图片" width="150">
@@ -103,7 +95,7 @@
                 <el-slider :min=1 :max=100 v-model="scope.row.probability" @change="test($event,scope.row.prizeId)" show-input></el-slider>
             </template>
         </el-table-column>
-        <el-table-column align="center" label="中奖概率" prop="probability" width="100">
+        <el-table-column align="center" label="中奖率" prop="probability" width="100">
           <div>{{list.probability}}</div>
         </el-table-column>
         <el-table-column
@@ -350,7 +342,6 @@ export default {
       this.prizeId = this.$route.query.id;
       getactivity(this.prizeId).then(response => {
         this.goods = response.data.data;
-        console.log(this.goods)
         if (this.goods.description.length > 1) {
           this.showdeletebutton = true;
         }
@@ -379,9 +370,9 @@ export default {
   font-weight:600;
 }
 .tabletop{
-  height:60px;
+  height:50px;
   width:100%;
-  line-height: 60px;
+  line-height: 50px;
   background:#f3f3f3;
   margin-bottom:20px;
 }

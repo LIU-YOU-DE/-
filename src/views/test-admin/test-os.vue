@@ -246,6 +246,7 @@ export default {
        for(let i=0;i<row.length;i++){
          this.tempDelArr.push(row[i].key)
        }
+       console.log(this.tempDelArr)
     },
     getList() {
       this.listLoading = true;
@@ -359,10 +360,6 @@ export default {
             });
         })
         .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
         });
     },
 

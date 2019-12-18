@@ -40,7 +40,7 @@
               v-model="listQuery.createTime"
               type="datetime"
               placeholder="选择日期"
-              value-format="yyyy-MM-dd HH:mm:ss"
+              value-format="yyyy-MM-dd"
               style="width:200px;"
           />
           </div>
@@ -76,10 +76,11 @@
             <el-tag v-if="scope.row.type==1">购车券订单</el-tag>
             <el-tag v-if="scope.row.type==2">积分礼品订单</el-tag>
             <el-tag v-if="scope.row.type==3">团购汽车订单</el-tag>
+            <el-tag v-if="scope.row.type==4">保养订单</el-tag>
           </template>
       </el-table-column>
 
-      <el-table-column align="center" label="用户ID" prop="memberName" />
+      <el-table-column align="center" label="用户姓名" prop="memberName" />
 
       <el-table-column align="center" label="订单金额" prop="payAmount" />
 
@@ -94,8 +95,8 @@
           <el-tag v-if="scope.row.status==1" type="error">待付款</el-tag>
           <el-tag v-if="scope.row.status==2" type="success">待发货</el-tag>
           <el-tag v-if="scope.row.status==3" type="success">待收货</el-tag>
-          <el-tag v-if="scope.row.status==4" type="success">已完成;</el-tag>
-          <el-tag v-if="scope.row.status==5" type="success">已取消;</el-tag>
+          <el-tag v-if="scope.row.status==4" type="success">已完成</el-tag>
+          <el-tag v-if="scope.row.status==5" type="success">已取消</el-tag>
         </template>
       </el-table-column>
 
@@ -126,11 +127,10 @@
 
           <el-button v-if="scope.row.status==4 && scope.row.type!==1" size="mini" @click="goOrderLook4(scope.row)" v-permission="['GET /orders/{id}']">查看订单</el-button>
           <el-button v-if="scope.row.status==4 && scope.row.type==1" size="mini" @click="goCarOrderLook(scope.row)">购车券订单</el-button>
-          <el-button v-if="scope.row.status==4" type="danger" size="mini" @click="goOrderShip(scope.row)">订单跟踪</el-button>
+          <el-button v-if="scope.row.status==4 && scope.row.type!==4" type="danger" size="mini" @click="goOrderShip(scope.row)">订单跟踪</el-button>
 
           <el-button v-if="scope.row.status==5 && scope.row.type!==1" size="mini" @click="goOrderLook(scope.row)" v-permission="['GET /orders/{id}']">查看订单</el-button>
-          <el-button v-if="scope.row.status==5 && scope.row.type==1" @click="goCarOrderLook(scope.row)">购车券订单</el-button>
-          <el-button v-if="scope.row.status==5" type="danger" size="mini" @click="deleteOrder(scope.row)" v-permission="['PUT /orders/orderStatus/{id}']">删除订单</el-button>
+          <el-button v-if="scope.row.status==5 && scope.row.type==1" size='mini' @click="goCarOrderLook(scope.row)">购车券订单</el-button>
 
         </template>
       </el-table-column>
@@ -314,11 +314,11 @@ export default {
       payStaus:[
         {
           id:'1',
-          value:"已付款"
+          value:"未付款"
         },
         {
           id:'2',
-          value:"未付款"
+          value:"已付款"
         }
       ],
       ordersType:[
@@ -342,14 +342,18 @@ export default {
         },
         {
           id:'2',
-          value:'待收货'
+          value:'待发货'
         },
         {
           id:'3',
-          value:'已完成'
+          value:'待收货'
         },
         {
           id:'4',
+          value:'已完成'
+        },
+        {
+          id:'5',
           value:'已取消'
         },
       ],
@@ -495,7 +499,11 @@ export default {
     },
     // 不同的订单状态跳转不同的页面
     goOrderLook4(row){
-      this.$router.push({path:"/test-goods/test-orderlook4",query:{id:row.orderId,status:row.status}})
+      if(row.type==4){
+        this.$router.push({path:"/test-goods/test-orderlook5",query:{id:row.orderId,status:row.status,type:row.type}})
+      }else{
+        this.$router.push({path:"/test-goods/test-orderlook4",query:{id:row.orderId,status:row.status}})
+      }
     },
     goOrderLook(row){
       this.$router.push({path:"/test-goods/test-orderlook1",query:{id:row.orderId,status:row.status}})
@@ -530,7 +538,7 @@ export default {
     handchange(event){
       for(var i=0;i<this.ordersStatus.length;i++){
         if(event==this.ordersStatus[i].value){
-          this.listQuery2.payStatus=this.ordersStatus[i].id
+          this.listQuery2.orderStatus=this.ordersStatus[i].id
         }
       }
     },
@@ -584,7 +592,6 @@ export default {
       this.listLoading = true;
       listOrder(this.listQuery)
         .then(response => {
-          // console.log(response.data.data.list);
           this.list = response.data.data.list
           this.list=this.list.reverse()
           this.total = response.data.data.total;

@@ -229,7 +229,7 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 10,
         name: undefined,
         sort: "add_time",
         order: "desc"
@@ -335,6 +335,7 @@ export default {
       this.listLoading = true;
       listGoods(this.listQuery)
         .then(response => {
+          console.log(list)
           this.list = response.data.data.list;
           this.total = response.data.data.total;
           this.listLoading = false;
@@ -375,30 +376,7 @@ export default {
           this.list.splice(index, 1);
         })
       }).catch(()=>{
-        deleteGoods(row).catch(response=>{
-          this.$notify.error({
-            title:"失败",
-            message:response.data.errmsg,
-            duration:0
-          })
-        })
       })
-      // deleteGoods(row)
-      //   .then(response => {
-      //     this.$notify.success({
-      //       title: "成功",
-      //       message: "成功下架"
-      //     });
-      //     const index = this.list.indexOf(row);
-      //     this.list.splice(index, 1);
-      //   })
-      //   .catch(response => {
-      //     this.$notify.error({
-      //       title: "失败",
-      //       message: response.data.errmsg,
-      //       duration: 0
-      //     });
-      //   });
     },
     handleDownload() {
       this.downloadLoading = true;

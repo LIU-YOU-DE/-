@@ -21,6 +21,7 @@
             v-on:keyup.enter.native="seachprize"></el-input>
         <span class="search">所属分类：</span>
              <el-cascader
+                clearable
                 v-model="categoryIds"
                 :options="categoryList"
                 :props="categoryProps"
@@ -209,7 +210,6 @@ export default {
                 isHot:undefined,
                 maxPoint:undefined,
                 minPoint:undefined
-
             },
             listQuery2: {
                 page: 1,
@@ -320,6 +320,7 @@ export default {
            getGiftList(this.listQuery2).then(response=>{
                this.list=response.data.data.list
                this.searchbox=false
+               this.listQuery2.isHot=undefined
                this.listQuery2.giftName=undefined
                this.listQuery2.minPoint=undefined
                this.listQuery2.maxPoint=undefined
@@ -327,7 +328,12 @@ export default {
            })
       },
         handDeletePrize(row){
-            deleteliping(row.id).then(response=>{
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(()=>{
+                deleteliping(row.id).then(response=>{
                 this.$notify.success({
                     title:"成功",
                     message:"删除成功"
@@ -340,6 +346,7 @@ export default {
                     duration:0
                 })
             })
+        }) 
         },
         // 编辑礼品
         handleUpdate(row){

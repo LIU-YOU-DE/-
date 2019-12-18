@@ -215,8 +215,6 @@ export default {
     },
     updateData() {
       this.$refs["dataForm"].validate(valid => {
-        // console.log(this.dataup, this.dataForm.id);
-        console.log(this.dataForm);
         if (valid) {
           updateIssue(this.dataForm.id, this.dataForm)
             .then(() => {
@@ -261,7 +259,12 @@ export default {
         });
     },
     handleDelete(row) {
-      deleteIssue(row.id)
+      this.$confirm('此操作将删除该条问答, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(()=>{
+        deleteIssue(row.id)
         .then(response => {
           this.$notify.success({
             title: "成功",
@@ -277,6 +280,7 @@ export default {
             duration: 0
           });
         });
+      })
     },
     // 下载
     handleDownload() {

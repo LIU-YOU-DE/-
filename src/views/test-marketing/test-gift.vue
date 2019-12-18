@@ -28,16 +28,6 @@
             label-width="100px"
             style="margin-top:10px;width:98%;margin:0 auto;"
         >
-        <!-- <el-input
-            v-model.trim="listQuery.name"
-            clearable
-            class="filter-item" 
-            style="width: 200px;margin-left:20px;margin-right:10px;"
-            placeholder="请输入奖品名称"
-            v-on:keyup.enter.native="seachprize"
-          />
-            <el-button class="filter-item" type="primary" icon="el-icon-search" @click="seachprize" v-permission="['GET /prize','GET /prize/name/{name}','GET /prize/short']">查找</el-button>
-            <el-button @click="pushPrizeBox" type="primary" style="margin-left:10px;" v-permission="['POST /prize']">添加</el-button> -->
             <div class="tabletop" style="margin-top:20px;">
                 <p class="table-title"><svg-icon icon-class="list2" class-name="card-panel-icon svg"/>数据列表</p>
             </div>
@@ -58,6 +48,13 @@
             </template>
         </el-table-column>
     </el-table>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getList"
+    />
 
     <!-- 添加奖品 -->
     <el-dialog
@@ -108,7 +105,7 @@
         width="40%">
         <el-form label-position="right" label-width="100px" ref="dataForm" :model="dataForm">
             <el-form-item label="奖品名称" prop="prizeName">
-                <el-input class="prizeinp" v-model="dataForm.prizeName"></el-input>
+              <el-input class="prizeinp" v-model="dataForm.prizeName"></el-input>
             </el-form-item>
             <el-form-item label="奖品描述" prop="description">
                 <template slot-scope="scope">
@@ -133,12 +130,12 @@
           </el-upload>
         </el-form-item>
             <el-form-item label="备注"  prop=" remark">
-                 <el-input  type="textarea" autosize  class="prizeinp" v-model="dataForm.remark"></el-input>
+              <el-input  type="textarea" autosize  class="prizeinp" v-model="dataForm.remark"></el-input>
             </el-form-item>
         </el-form>
         <div style="display:flex;justify-content:flex-end;">
-            <el-button @click="dialogVisible2 = false" style="display:inline-block;">取 消</el-button>
-            <el-button @click="handUpdatePrize" style="display:inline-block;">更新奖品</el-button>
+          <el-button @click="dialogVisible2 = false" style="display:inline-block;">取 消</el-button>
+          <el-button @click="handUpdatePrize" style="display:inline-block;">更新奖品</el-button>
         </div>
         
     </el-dialog>
@@ -153,8 +150,10 @@
 
 <script>
 import { getPrizeList,pushPrize,uploadPath ,updateprize,deleteprize,getprize} from '@/api/storage'
+import Pagination from "@/components/Pagination"; // Secondary package based on el-pagination
 import { getToken } from '@/utils/auth'
 export default {
+  components: { Pagination },
     data(){
         return {
             uploadPath,
@@ -165,6 +164,7 @@ export default {
             showdeletebutton:false,
             labelPosition:"right",
             name:"",
+            total:0,
             prizeId:null,
             imgUrl:"",
             goods:{
@@ -233,7 +233,12 @@ export default {
           })
       },
         handDeletePrize(row){
-            deleteprize(row.prizeId).then(response=>{
+        this.$confirm('此操作将删除该奖品, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          deleteprize(row.prizeId).then(response=>{
                 this.$notify.success({
                     title:"成功",
                     message:"删除成功"
@@ -246,6 +251,7 @@ export default {
                     duration:0
                 })
             })
+        })
         },
         // 编辑奖品
         handleUpdatePrize(row){
@@ -326,8 +332,9 @@ export default {
         // 获取奖品列表
         getList(){
             getPrizeList(this.listQuery).then(response=>{
-                this.list=response.data.data.list
-                this.imgUrl=this.list.imgUrl
+              this.list=response.data.data.list
+              this.total=response.data.data.total
+              this.imgUrl=this.list.imgUrl
             }).catch(response=>{
                 this.$notify.error({
                         title:'获取失败',

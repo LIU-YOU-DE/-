@@ -1,37 +1,36 @@
 <template>
     <div style="width:90%;margin:0 auto;">
       <div class="tabletop">
-        <p class="address">活动详情</p>
+        <p class="address">抽奖活动详情</p>
       </div>
-      <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:50px;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />活动介绍</p>
+      <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:50px;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />抽奖活动介绍</p>
       <div style="width:70%;margin:0 auto;">
         <el-form ref="dataForm" :model="dataForm" label-width="150px;" label-position="right">
-          <el-form-item label="活动ID:" style="padding-left:16px;">
-                <span>{{dataForm.id}}</span>
-            </el-form-item>
-            <el-form-item label="活动名称:">
+            <el-form-item label="抽奖活动名称:">
                 <span>{{dataForm.activityName}}</span>
             </el-form-item>
-            <el-form-item label="活动类型:">
+            <el-form-item label="抽奖活动类型:">
               <span>{{dataForm.type}}</span>
             </el-form-item>
-            <el-form-item label="活动描述:">
+            <el-form-item label="抽奖活动描述:">
               <template slot-scope="scope">
                 <div v-for="(d,index) in dataForm.description" :key="index" style="padding-left:67px;">
                   <span>{{dataForm.description[index]}}</span>
               </div>
               </template>
             </el-form-item>
-            <el-form-item label="活动状态:">
+            <el-form-item label="抽奖活动状态:">
               <el-tag>{{dataForm.payStatus==1?'未开始':'进行中'}}</el-tag>
+            </el-form-item>
+            <el-form-item label="备注:">
+              
             </el-form-item>
       </el-form>
       </div>
       
 
-         <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:50px;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />奖品列表</p>
+         <p class="address" style="font-size:16px;margin-bottom:40px;margin-left:50px;"><svg-icon icon-class="qi" class-name="card-panel-icon svg" />活动奖品列表</p>
         <el-table border :data="dataForm.prizeList" style="width:90%;margin:0 auto;">
-        <el-table-column align="center" label="奖品ID" prop="prizeId"/>
         <el-table-column align="center" label="奖品名称" prop="prizeName"/>
         <el-table-column align="center" label="奖品描述" prop="description" type="textarea"/>
         <el-table-column align="center" prop="imgUrl" label="奖品图片">
@@ -65,13 +64,13 @@ export default {
     },
     methods:{
         geilist(){
-          var row=this.$route.query.row
-          this.dataForm.id=row.id
-          this.dataForm.activityName=row.activityName
-          this.dataForm.type=row.type
-          this.dataForm.description=row.description
-          this.dataForm.prizeList=row.prizeList
-          this.dataForm.payStatus=row.status
+            var row=this.$route.query.row
+         this.dataForm.id=row.id
+         this.dataForm.activityName=row.activityName
+         this.dataForm.type=row.type
+         this.dataForm.description=row.description
+         this.dataForm.prizeList=row.prizeList
+         this.dataForm.payStatus=row.status
         }
     }
 }

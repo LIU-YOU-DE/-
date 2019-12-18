@@ -7,7 +7,7 @@
         <p style="display:inline-block;margin-left:10px;margin-top:20px;color:#555;font-size:15px;"><svg-icon icon-class="search" class-name="card-panel-icon svg" />筛选查找</p>
         <div>
           <el-button v-permission="['GET /admin']" class="filter-item" icon="el-icon-search" @click="handleFilter" style="margin-top:8px;display:inline-block;">查找</el-button>
-          <el-button v-permission="['POST /admin']" class="filter-item" icon="el-icon-edit" @click="dialogFormVisible=true" style="margin-top:8px;display:inline-block;">添加</el-button>
+          <el-button v-permission="['POST /admin']" class="filter-item" icon="el-icon-edit" @click="handleCreate" style="margin-top:8px;display:inline-block;">添加</el-button>
         </div>
       </div>
       <div style="margin-top:10px;">
@@ -21,7 +21,7 @@
       <p class="table-title"><svg-icon icon-class="list2" class-name="card-panel-icon svg"/>数据列表</p>
       </div>
       <!-- 查询结果 -->
-    <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
+      <el-table v-loading="listLoading" :data="list" element-loading-text="正在查询中。。。" border fit highlight-current-row>
       <el-table-column align="center" label="管理员ID" prop="id" sortable/>
 
       <el-table-column align="center" label="管理员名称" prop="username"/>
@@ -40,7 +40,7 @@
 
       <el-table-column align="center" label="操作" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button v-permission="['GET /admin/{id}','PUT /admin/{id}']" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+          <el-button v-permission="['PUT /admin/{id}','GET /admin/{id}']"size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
           <el-button v-permission="['DELETE /admin/{id}']" type="danger" size="mini" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -48,57 +48,9 @@
     </div>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-
-
-<!-- 编辑管理员信息 -->
-    <div class="popContainer" v-show="updatebox">
-      <div class="createbox">
-        <div class="tabletop" style="margin-bottom:20px;">
-           <h3 class="address">编辑管理员</h3>
-        </div>
-        <el-form ref="updatedataForm" :model="updatedataForm" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="管理员名称" prop="username">
-          <el-input v-model="updatedataForm.username"/>
-        </el-form-item>
-        <el-form-item label="管理员密码" prop="password">
-          <el-input v-model="updatedataForm.password" auto-complete="off" show-password/>
-        </el-form-item>
-        <el-form-item label="管理员头像" prop="avatar">
-          <el-upload
-            :headers="headers"
-            :action="uploadPath"
-            :show-file-list="false"
-            :on-success="uploadAvatar"
-            class="avatar-uploader"
-            accept=".jpg,.jpeg,.png,.gif">
-            <img v-if="updatedataForm.avatar" :src="updatedataForm.avatar" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"/>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="管理员角色" prop="roleIds">
-          <el-select v-model="updatedataForm.roleIds" multiple placeholder="请选择">
-            <el-option
-              v-for="item in roleOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"/>
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer" style="display:flex;justify-content:flex-end;padding-right:20px;margin-bottom:20px">
-        <el-button @click="updatebox = false">取消</el-button>
-        <el-button @click="updateData" style="margin-left:10px;">确定</el-button>
-      </div>
-      </div>
-    </div>
-
-    <!-- 添加管理员 -->
-    <div class="popContainer" v-show="dialogFormVisible">
-      <div class="createbox">
-        <div class="tabletop" style="margin-bottom:20px;">
-           <h3 class="address">添加管理员</h3>
-        </div>
-        <el-form ref="dataForm" :model="dataForm" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+    
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="dataForm" status-icon label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="管理员名称" prop="username">
           <el-input v-model="dataForm.username"/>
         </el-form-item>
@@ -127,13 +79,12 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer" style="display:flex;justify-content:flex-end;padding-right:20px;margin-bottom:20px">
+      <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button @click="createData" style="margin-left:10px;">确定</el-button>
+        <el-button v-if="dialogStatus=='create'" @click="createData">确定</el-button>
+        <el-button v-else @click="updateData">确定</el-button>
       </div>
-      </div>
-    </div>
-
+    </el-dialog>
   </div>
 </template>
 
@@ -244,7 +195,6 @@ export default {
   data() {
     return {
       uploadPath,
-      updatebox:false,
       list: null,
       total: 0,
       roleOptions: null,
@@ -256,13 +206,6 @@ export default {
         sort: 'create_time',
         order: 'desc'
       },
-      updatedataForm: {
-        id: undefined,
-        username: undefined,
-        password: undefined,
-        avatar: undefined,
-        roleIds: []
-      },
       dataForm: {
         id: undefined,
         username: undefined,
@@ -272,6 +215,16 @@ export default {
       },
       dialogFormVisible: false,
       dialogStatus: '',
+      textMap: {
+        update: '编辑管理员',
+        create: '创建管理员'
+      },
+      rules: {
+        username: [
+          { required: true, message: '管理员名称不能为空', trigger: 'blur' }
+        ],
+        // password: [{ required: true, message: '密码不能为空', trigger: 'blur' }]
+      },
       downloadLoading: false
     }
   },
@@ -329,6 +282,7 @@ export default {
     },
     handleCreate() {
       this.resetForm()
+      this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
@@ -358,22 +312,22 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.updatedataForm = row
-      this.updatebox = true
+      this.dataForm = Object.assign({},row)
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
     },
     updateData() {
-      this.$refs['updatedataForm'].validate(valid => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          updateAdmin(this.updatedataForm.id,this.updatedataForm)
+          updateAdmin(this.dataForm.id,this.dataForm)
             .then(() => {
               for (const v of this.list) {
-                if (v.id === this.updatedataForm.id) {
+                if (v.id === this.dataForm.id) {
                   const index = this.list.indexOf(v)
-                  console.log(this.list)
-                  this.list.splice(index, 1, this.updatedataForm)
+                  this.list.splice(index, 1, this.dataForm)
                   break
                 }
               }

@@ -144,6 +144,7 @@ export default {
             var typeName=this.carTypeName
             if(typeName==""){
                 this.$message('车型名称不能为空');
+                return 
             }
             addCarType(typeName).then(response=>{
                 this.$notify.success({

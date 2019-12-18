@@ -74,6 +74,13 @@
         </template>
       </el-table-column>
     </el-table>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getList"
+      />
 
     <!-- 添加 -->
     <div class="popContainer" v-show="popbox">
@@ -195,8 +202,7 @@
         <el-button type="primary" @click="updateData">确定</el-button>
       </div>
       </div>
-    </div>
-      
+    </div>   
   </div>
 </template>
 
@@ -280,9 +286,11 @@ import {
   showswitch
 } from '@/api/giftfenlei'
 import { uploadPath } from '@/api/storage'
+import Pagination from "@/components/Pagination"; // Secondary package based on el-pagination
 import { getToken } from '@/utils/auth'
 
 export default {
+  components: { Pagination },
   name: 'Category',
   data() {
     return {
@@ -294,9 +302,16 @@ export default {
       updataid: null,
       popbox:false,
       uploadPath,
+      total:0,
       list: [],
       listLoading: true,
       catL1: {},
+      listQuery: {
+        page: 1,
+        limit: 10,
+        sort: "add_time",
+        order: "desc",
+      },
       dataForm: {
         id: undefined,
         name: '',
@@ -348,9 +363,10 @@ export default {
     },
     getList() {
       this.listLoading = true
-      listCategory()
+      listCategory(this.listQuery)
         .then(response => {
           this.list = response.data.data.list
+          this.total=response.data.data.total
           this.listLoading = false
         })
         .catch(() => {
@@ -360,8 +376,6 @@ export default {
     },
     getCatL1() {
       listCatL1().then(response => {
-        // console.log(response.data.data);
-
         this.catL1 = response.data.data
       })
     },
@@ -457,7 +471,12 @@ export default {
       })
     },
     handleDelete(row) {
-      deleteCategory(row.id)
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(()=>{
+        deleteCategory(row.id)
         .then(response => {
           this.getList()
           // 更新L1目录
@@ -474,6 +493,7 @@ export default {
             duration: 0
           })
         })
+      })
     },
     // 修改状态
     handleshowswitch(id, data) {

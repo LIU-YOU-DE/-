@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { get } from 'http'
 
 export function listStorage(query) {
   return request({
@@ -160,6 +161,154 @@ export function deleteprizeroc(id){
   return request({
     url:`/prizeRecord/${id}`,
     method:'delete'
+  })
+}
+
+export function intersUpkeepAdd(data){
+  return request({
+    url:`/Upkeep/intersUpkeep`,
+    method:'post',
+    data
+  })
+}
+
+export function upkeepMerChantAdd(data){
+  return request({
+    url:`/upkeepMerChant/intersUpkeepChant`,
+    method:'post',
+    data
+  })
+}
+
+export function upkeepList(type){
+  return request({
+    url:`/Upkeep/upkeepList/${type}`,
+    method:'get'
+  })
+}
+
+export function handProduct(data){
+  return request({
+    url:`/product/intersProduct`,
+    method:'post',
+    data
+  })
+}
+
+export function getMearchList(query){
+  return request({
+    url:`/upkeepMerChant/keyword`,
+    method:'get',
+    params: query
+  })
+}
+
+export function getMearProduct(query){
+  return request({
+    url:`/product/query/${query.merchantId}`,
+    method:'get',
+    params:query
+  })
+}
+
+export function updateMearchar(data){
+  return request({
+    url:`/upkeepMerChant/update/${data.merchantId}`,
+    method:'put',
+    data
+  })
+}
+
+export function getProduct(query){
+  return request({
+    url:`/product/inquire/${query.merchantId}`,
+    method:'get',
+    params:query
+  })
+}
+
+export function updateProduAndMerchant(data){
+  return request({
+    url:`/produAndMerchant/amend/${data.id}`,
+    method:'put',
+    data
+  })
+}
+
+export function getProductSelection(){
+  return request({
+    url:`/product/selectList`,
+    method:'get',
+  })
+}
+
+export function handUpdateProduct(data){
+  return request({
+    url:`/produAndMerchant/Addingssociated`,
+    method:'post',
+    data
+  })
+}
+
+export function drawType(){
+  return request({
+    url:`/Upkeep/upkeepList`,
+    method:'get'
+  })
+}
+
+export function deleteProductList(idList){
+  return request({
+    url:`/product/delect`,
+    method:'post',
+    data:idList
+  })
+}
+
+export function updateProduct(data){
+  return request({
+    url:`/product/update/${data.productId}`,
+    method:'put',
+    data
+  })
+}
+
+export function getProductList(){
+  return request({
+    url:`/product/statusList`,
+    method:'get'
+  })
+}
+
+export function updateStatus(query){
+  return request({
+    url:`/product/updateStatus/${query.productId}`,
+    method:'put',
+    params:query
+  })
+}
+
+export function getUpList(query){
+  return request({
+    url:`/Upkeep/selectList/${query.currentPage}`,
+    method:'get',
+    params:query
+  })
+}
+
+export function intersUpdateUpkeepAdd(data){
+  return request({
+    url:`/Upkeep/update/${data.upkeepId}`,
+    method:'put',
+    data
+  })
+}
+
+export function deleteUpkeep(data){
+  return request({
+    url:`/Upkeep/delect`,
+    method:'post',
+    data
   })
 }
 
